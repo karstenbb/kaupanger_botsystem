@@ -105,6 +105,99 @@ export async function getProfile(req: AuthRequest, res: Response): Promise<void>
   }
 }
 
+/** PUT /api/auth/profile — Update own profile */
+export async function updateProfile(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const { username, email, password, name, position, number, birthDate } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+      include: { player: true },
+    });
+
+    if (!user) {
+      res.status(404).json({ error: 'Brukar ikkje funnen' });
+      return;
+    }
+
+    // Check unique username/email if changed
+    if (username && username.toLowerCase() !== user.username.toLowerCase()) {
+      const existing = await prisma.user.findFirst({
+        where: {
+          username: { equals: username, mode: 'insensitive' },
+          id: { not: user.id },
+        },
+      });
+      if (existing) {
+        res.status(409).json({ error: 'Brukarnamn er allereie i bruk' });
+        return;
+      }
+    }
+
+    if (email && email.toLowerCase() !== user.email.toLowerCase()) {
+      const existing = await prisma.user.findFirst({
+        where: {
+          email: { equals: email, mode: 'insensitive' },
+          id: { not: user.id },
+        },
+      });
+      if (existing) {
+        res.status(409).json({ error: 'E-post er allereie i bruk' });
+        return;
+      }
+    }
+
+    // Update user fields
+    const userData: Record<string, unknown> = {};
+    if (username) userData.username = username.toLowerCase();
+    if (email) userData.email = email.toLowerCase();
+    if (password) {
+      const bcrypt = await import('bcryptjs');
+      userData.password = await bcrypt.hash(password, 12);
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
+      data: userData,
+      include: { player: true },
+    });
+
+    // Update linked player if exists
+    if (user.playerId) {
+      const playerData: Record<string, unknown> = {};
+      if (name) playerData.name = name;
+      if (position !== undefined) playerData.position = position || null;
+      if (number !== undefined) playerData.number = number ? Number(number) : null;
+      if (birthDate !== undefined) playerData.birthDate = birthDate ? new Date(birthDate) : null;
+
+      if (Object.keys(playerData).length > 0) {
+        await prisma.player.update({
+          where: { id: user.playerId },
+          data: playerData,
+        });
+      }
+    }
+
+    // Re-fetch with updated player
+    const finalUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      include: { player: true },
+    });
+
+    res.json({
+      id: finalUser!.id,
+      username: finalUser!.username,
+      email: finalUser!.email,
+      role: finalUser!.role,
+      playerId: finalUser!.playerId,
+      player: finalUser!.player,
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ error: 'Klarte ikkje oppdatere profil' });
+  }
+}
+
 /** POST /api/auth/register — Public self-registration (creates User + Player) */
 export async function register(req: Request, res: Response): Promise<void> {
   try {

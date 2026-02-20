@@ -1,9 +1,12 @@
 export interface User {
   id: string;
   username: string;
+  email?: string;
   role: 'ADMIN' | 'USER';
   playerId: string | null;
-  player?: Player;
+  player?: Player & {
+    birthDate?: string;
+  };
 }
 
 export interface Player {

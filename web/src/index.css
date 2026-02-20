@@ -1288,3 +1288,134 @@ tbody tr:last-child td {
   color: var(--error);
   background: rgba(244, 67, 54, 0.1);
 }
+
+/* ── Birthday Banner ──────────────────────────────────────────────── */
+.birthday-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.12), rgba(244, 67, 54, 0.08));
+  border: 1px solid rgba(255, 152, 0, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  margin: 0 0 16px;
+  animation: birthday-slide-in 0.4s ease-out;
+}
+
+@keyframes birthday-slide-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.birthday-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.birthday-banner-emoji {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.birthday-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.birthday-banner-text strong {
+  color: var(--warning);
+}
+
+.birthday-banner-text > span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.birthday-banner-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+
+.birthday-banner-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Profile Page ─────────────────────────────────────────────────── */
+.profile-page-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-card {
+  position: sticky;
+  top: 20px;
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sidebar-user-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+  min-width: 0;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
+}
+
+.sidebar-user-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .profile-page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card {
+    position: static;
+  }
+
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .birthday-banner {
+    border-radius: 0;
+    margin: 0 0 8px;
+  }
+
+  .birthday-banner-emoji {
+    font-size: 22px;
+  }
+
+  .birthday-banner-text {
+    font-size: 13px;
+  }
+
+  .birthday-banner-text > span {
+    font-size: 12px;
+  }
+}

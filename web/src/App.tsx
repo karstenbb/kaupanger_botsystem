@@ -9,6 +9,7 @@ import FinesPage from './pages/FinesPage';
 import MyFinesPage from './pages/MyFinesPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import AdminPage from './pages/AdminPage';
+import ProfilePage from './pages/ProfilePage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -41,6 +42,7 @@ function AppRoutes() {
         <Route path="/boter" element={<FinesPage />} />
         <Route path="/mine-boter" element={<MyFinesPage />} />
         <Route path="/toppliste" element={<LeaderboardPage />} />
+        <Route path="/profil" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

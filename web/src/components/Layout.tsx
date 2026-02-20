@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
+import BirthdayBanner from './BirthdayBanner';
 import {
   IconHome,
   IconUsers,
@@ -10,6 +11,7 @@ import {
   IconLogout,
   IconFootball,
   IconWallet,
+  IconUser,
 } from './Icons';
 
 export default function Layout() {
@@ -57,11 +59,13 @@ export default function Layout() {
         </nav>
 
         <div className="sidebar-user">
-          <Avatar name={user?.username ?? '?'} size="sm" />
-          <div className="sidebar-user-info">
-            <p>{user?.username}</p>
-            <span>{isAdmin ? 'Administrator' : 'Spelar'}</span>
-          </div>
+          <NavLink to="/profil" className="sidebar-user-link" title="Rediger profil">
+            <Avatar name={user?.username ?? '?'} size="sm" />
+            <div className="sidebar-user-info">
+              <p>{user?.username}</p>
+              <span>{isAdmin ? 'Administrator' : 'Spelar'}</span>
+            </div>
+          </NavLink>
           <button className="logout-btn" onClick={logout} title="Logg ut">
             <IconLogout />
           </button>
@@ -70,6 +74,9 @@ export default function Layout() {
 
       {/* ── Main area ────────────────────────────────────── */}
       <div className="main-content">
+        {/* Birthday banner */}
+        <BirthdayBanner />
+
         {/* Mobile header */}
         <header className="mobile-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -80,7 +87,9 @@ export default function Layout() {
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{user?.username}</span>
+            <NavLink to="/profil" style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }} title="Min profil">
+              <IconUser />
+            </NavLink>
             <button className="logout-btn" onClick={logout}>
               <IconLogout />
             </button>

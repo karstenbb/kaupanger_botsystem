@@ -10,6 +10,7 @@ interface AuthCtx {
   login: (username: string, password: string) => Promise<void>;
   register: (body: RegisterBody) => Promise<void>;
   logout: () => void;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthCtx | undefined>(undefined);
@@ -17,6 +18,15 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const refreshProfile = async () => {
+    try {
+      const profile = await authApi.getProfile();
+      setUser(profile);
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
@@ -50,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, isAdmin: user?.role === 'ADMIN', login, register, logout }}
+      value={{ user, isLoading, isAdmin: user?.role === 'ADMIN', login, register, logout, refreshProfile }}
     >
       {children}
     </AuthContext.Provider>
