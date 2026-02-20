@@ -1,0 +1,71 @@
+// Prisma Schema for Kaupanger Botsystem
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  playerId  String?  @unique
+  player    Player?  @relation(fields: [playerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  id        String    @id @default(uuid())
+  name      String
+  birthDate DateTime?
+  position  String?
+  number    Int?
+  avatarUrl String?
+  user      User?
+  fines     Fine[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FineType {
+  id          String   @id @default(uuid())
+  name        String
+  amount      Float
+  description String?
+  category    String   @default("Generelt")
+  fines       Fine[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Fine {
+  id         String        @id @default(uuid())
+  playerId   String
+  player     Player        @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  fineTypeId String
+  fineType   FineType      @relation(fields: [fineTypeId], references: [id])
+  amount     Float
+  reason     String?
+  status     PaymentStatus @default(UNPAID)
+  date       DateTime      @default(now())
+  paidAt     DateTime?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
