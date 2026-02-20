@@ -152,7 +152,6 @@ export async function updateProfile(req: AuthRequest, res: Response): Promise<vo
     if (username) userData.username = username.toLowerCase();
     if (email) userData.email = email.toLowerCase();
     if (password) {
-      const bcrypt = await import('bcryptjs');
       userData.password = await bcrypt.hash(password, 12);
     }
 
