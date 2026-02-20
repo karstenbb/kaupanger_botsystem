@@ -1,0 +1,28 @@
+databases:
+  - name: kaupanger-db
+    databaseName: kaupanger_botsystem
+    user: kaupanger
+    plan: free
+
+services:
+  - type: web
+    name: kaupanger-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx prisma migrate deploy && npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kaupanger-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: https://kaupanger-botsystem.vercel.app

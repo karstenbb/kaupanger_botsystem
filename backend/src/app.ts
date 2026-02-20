@@ -6,7 +6,10 @@ import { errorHandler } from './middleware/errorHandler';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
+  credentials: true,
+}));
 app.use(express.json());
 
 // Health check
