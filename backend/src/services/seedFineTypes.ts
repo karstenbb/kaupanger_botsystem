@@ -1,14 +1,29 @@
 import prisma from './prisma';
 
 /**
- * Seed default bottypar viss tabellen er tom (t.d. første deploy).
- * Køyrer ved serverstart — legg berre til viss det ikkje finst nokon FineType.
+ * Seed default bottypar viss dei nye §-typane manglar.
+ * Køyrer ved serverstart. Slettar gamle typar utan bøter, legg til nye.
  */
 export async function seedDefaultFineTypes() {
-  const count = await prisma.fineType.count();
-  if (count > 0) return; // Allereie seeda
+  // Sjekk om nye §-format bottypar allereie finst
+  const hasNewTypes = await prisma.fineType.findFirst({
+    where: { name: { startsWith: '§' } },
+  });
+  if (hasNewTypes) return; // Allereie seeda med nye typar
 
-  console.log('📋 Auto-seeding bottypar (tom tabell)...');
+  console.log('📋 Oppdaterer bottypar til nye §-format...');
+
+  // Slett gamle typar som IKKJE har bøter knytt til seg
+  const oldTypes = await prisma.fineType.findMany({
+    where: { NOT: { name: { startsWith: '§' } }, category: { not: 'Automatisk' } },
+    include: { _count: { select: { fines: true } } },
+  });
+  for (const old of oldTypes) {
+    if (old._count.fines === 0) {
+      await prisma.fineType.delete({ where: { id: old.id } });
+      console.log(`  🗑️  Sletta gammal type: ${old.name}`);
+    }
+  }
 
   const fineTypes = [
     { name: '§ 69 Inkasso', amount: 50, description: 'Ikkje betale bøter i tide, straffast med ei bot på 50 kr per dag.', category: '§ 69' },
