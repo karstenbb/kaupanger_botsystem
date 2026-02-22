@@ -47,30 +47,50 @@ async function main() {
 
   // ── Create Fine Types ──────────────────────────────────────────────
   const fineTypes = await Promise.all([
-    prisma.fineType.create({
-      data: { name: 'Sein til trening', amount: 100, description: 'Kom for seint til trening', category: 'Trening' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Sein til kamp', amount: 200, description: 'Kom for seint til kamp', category: 'Kamp' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Gløymt utstyr', amount: 150, description: 'Gløymde utstyr til trening/kamp', category: 'Utstyr' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Fråvær trening', amount: 200, description: 'Fråvær utan gyldig grunn', category: 'Trening' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Gult kort', amount: 250, description: 'Gult kort i kamp', category: 'Kamp' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Raudt kort', amount: 500, description: 'Raudt kort i kamp', category: 'Kamp' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Bom på straffe', amount: 100, description: 'Bom på straffespark', category: 'Kamp' },
-    }),
-    prisma.fineType.create({
-      data: { name: 'Dårleg oppføring', amount: 300, description: 'Dårleg oppføring på eller utanfor bana', category: 'Generelt' },
-    }),
+    // § 69
+    prisma.fineType.create({ data: { name: '§ 69 Inkasso', amount: 50, description: 'Ikkje betale bøter i tide, straffast med ei bot på 50 kr per dag.', category: '§ 69' } }),
+
+    // Kapittel 1: Trening
+    prisma.fineType.create({ data: { name: '§ 1-1 Fråvær trening', amount: 100, description: 'Ikkje møte på trening uten gyldig grunn.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-2 Sein til treningsstart', amount: 100, description: 'Komme forseint til treningsstart.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-3 Sein til oppmøte (trening)', amount: 100, description: 'Komme for sent til oppmøte.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-4 Tunnel i firkant', amount: 20, description: 'Du blir slått tunnel på, hvor medspiller får touch på ballen etter tunnelen.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-5 Ball ut av stadion', amount: 25, description: 'Du skyter ballen over nettet bak mål. Gjeld kun på kamp.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-6 Do-pause', amount: 25, description: 'Du forlater en trening som har startet for å gå på do.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-7 Feil farge på treningstøy', amount: 50, description: 'Du trener i annen farge enn grønn.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-8 Feil klubblogo', amount: 50, description: 'Du trener med en annen klubb sin logo på treningstøyet.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-9 Taper botkonkurranse', amount: 20, description: 'Dei som feiler eller taper konkurransen blir dømt til bot.', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-10 Gløymt personleg utstyr', amount: 50, description: 'Gløymt personlig utstyr (gjeld alt, fra flaske til såle).', category: 'Trening' } }),
+    prisma.fineType.create({ data: { name: '§ 1-11 Utstyr inn/ut', amount: 50, description: 'De fire yngste på trening har ansvar for å ut og inn utstyr.', category: 'Trening' } }),
+
+    // Kapittel 2: Kamp
+    prisma.fineType.create({ data: { name: '§ 2-1 Fråvær kamp', amount: 500, description: 'Ikkje møte på kamp, uten å melde forfall innen rimelig tid.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-2 Forfall sløv prioritering', amount: 100, description: 'Forfall til kamp, som følge av sløv prioritering.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-3 Konfirmasjonsbot', amount: 50, description: 'Du går glipp av kamp fordi du prioriterer konfirmasjon.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-4 Sein til oppmøte (kamp)', amount: 100, description: 'Komme for sent til oppmøte på kamp.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-5 Sein til kampstart', amount: 500, description: 'Komme forseint til kampstart.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-6 Gløymt kamputstyr', amount: 100, description: 'Gløymt nødvendig kamputstyr (sko, leggskinn osv.).', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-7 Gløymt utstyr etter kamp', amount: 50, description: 'Gløymt utstyr etter kamp.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-8 Unødvendig gult kort', amount: 100, description: 'Unødvendig gult kort.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-9 Unødvendig rødt kort', amount: 200, description: 'Unødvendig rødt kort.', category: 'Kamp' } }),
+    prisma.fineType.create({ data: { name: '§ 2-10 Feilkast', amount: 50, description: 'Feilkast. Dommeren dømmer.', category: 'Kamp' } }),
+
+    // Kapittel 3: Uønskt atferd
+    prisma.fineType.create({ data: { name: '§ 3-1 Manglande bursdagskake', amount: 200, description: 'Ikkje ta med bursdagskake den uken du har bursdag.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-2 Provoserende atferd mot botsjef', amount: 50, description: 'Klaga på ein klar bot til botsjefane.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-3 Idiotbot', amount: 50, description: 'Du oppfører deg, eller fremstår som ein tulling. 10–300 kr.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-4 Lygebot', amount: 50, description: 'Du blir tatt i løgn.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-5 Fylla dagen før kamp', amount: 200, description: 'Du er full på fest dagen før kamp.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-6 Ikkje møte på lagfest', amount: 25, description: 'Ikkje møte på lagfest. 25 eller 200 kr.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-7 Pisse i dusjen', amount: 200, description: 'Pisse i dusjen i laget garderobe.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-8 Mobil i garderoben', amount: 25, description: 'Du bruker mobilen i garderoben i oppmøtetid.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-9 Hodeplagg inn i garderoben', amount: 20, description: 'Du har på hodeplagg når du går inn i garderoben.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-10 Manglande bidrag til botkassen', amount: 75, description: 'Du bidrar ikkje til fellesskapet gjennom botkassen.', category: 'Uønskt atferd' } }),
+    prisma.fineType.create({ data: { name: '§ 3-11 Mediebot', amount: 50, description: 'Du intervjues av media uten å gi Kaupanger ein Shoutout.', category: 'Uønskt atferd' } }),
+
+    // Kapittel 4: Spond
+    prisma.fineType.create({ data: { name: '§ 4-1 Svarfrist Spond', amount: 50, description: 'Svarfrist søndag for deltakelse på denne ukens treninger.', category: 'Spond' } }),
+    prisma.fineType.create({ data: { name: '§ 4-2 Forfall etter kl 12', amount: 50, description: 'Forfall til trening etter 12.00 på treningsdag.', category: 'Spond' } }),
   ]);
 
   // ── Seed Rules Page Content ─────────────────────────────────────────
