@@ -14,6 +14,7 @@ function renderMarkdown(md: string): string {
   const lines = md.split('\n');
   let html = '';
   let inUl = false;
+  let inOl = false;
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
@@ -21,6 +22,7 @@ function renderMarkdown(md: string): string {
     // Horizontal rule
     if (/^-{3,}$/.test(line.trim())) {
       if (inUl) { html += '</ul>'; inUl = false; }
+      if (inOl) { html += '</ol>'; inOl = false; }
       html += '<hr/>';
       continue;
     }
@@ -28,12 +30,14 @@ function renderMarkdown(md: string): string {
     // Headings
     if (line.startsWith('# ')) {
       if (inUl) { html += '</ul>'; inUl = false; }
+      if (inOl) { html += '</ol>'; inOl = false; }
       const text = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       html += `<h1>${text}</h1>`;
       continue;
     }
     if (line.startsWith('## ')) {
       if (inUl) { html += '</ul>'; inUl = false; }
+      if (inOl) { html += '</ol>'; inOl = false; }
       const text = line.slice(3).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       html += `<h2>${text}</h2>`;
       continue;
@@ -41,14 +45,26 @@ function renderMarkdown(md: string): string {
 
     // Bullet list
     if (/^- /.test(line)) {
+      if (inOl) { html += '</ol>'; inOl = false; }
       if (!inUl) { html += '<ul>'; inUl = true; }
       const text = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       html += `<li>${text}</li>`;
       continue;
     }
 
-    // Close list if open
+    // Numbered list
+    const olMatch = line.match(/^\d+\.\s+(.*)/);
+    if (olMatch) {
+      if (inUl) { html += '</ul>'; inUl = false; }
+      if (!inOl) { html += '<ol>'; inOl = true; }
+      const text = olMatch[1].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html += `<li>${text}</li>`;
+      continue;
+    }
+
+    // Close lists if open
     if (inUl) { html += '</ul>'; inUl = false; }
+    if (inOl) { html += '</ol>'; inOl = false; }
 
     // Blank line
     if (line.trim() === '') {
@@ -57,7 +73,7 @@ function renderMarkdown(md: string): string {
 
     // Normal paragraph — collect consecutive non-blank lines
     let para = line;
-    while (i + 1 < lines.length && lines[i + 1].trim() !== '' && !lines[i + 1].startsWith('#') && !lines[i + 1].startsWith('- ') && !/^-{3,}$/.test(lines[i + 1].trim())) {
+    while (i + 1 < lines.length && lines[i + 1].trim() !== '' && !lines[i + 1].startsWith('#') && !lines[i + 1].startsWith('- ') && !/^\d+\.\s/.test(lines[i + 1]) && !/^-{3,}$/.test(lines[i + 1].trim())) {
       i++;
       para += '<br/>' + lines[i];
     }
@@ -66,6 +82,7 @@ function renderMarkdown(md: string): string {
   }
 
   if (inUl) html += '</ul>';
+  if (inOl) html += '</ol>';
   return html;
 }
 
