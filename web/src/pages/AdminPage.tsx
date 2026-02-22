@@ -132,8 +132,8 @@ export default function AdminPage() {
             <div className="card" style={{ flex: '1 1 250px', padding: 16 }}>
               <div style={{ fontWeight: 600, marginBottom: 4 }}>Botfri månad</div>
               <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 12 }}>
-                Spelarar utan bøter førre månad får 70 kr bot.<br />
-                Køyrer automatisk 1. kvar månad kl 08:00.
+                Spelarar utan bøter denne månaden får 75 kr bot.<br />
+                Køyrer automatisk siste dagen kvar månad kl 08:00.
               </p>
               <button className="btn btn-primary btn-sm" onClick={runBotfri} disabled={runningBotfri}>
                 {runningBotfri ? 'Køyrer…' : '▶ Køyr no'}

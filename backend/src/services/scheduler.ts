@@ -4,8 +4,8 @@ import prisma from './prisma';
 /**
  * Automatiske bøter:
  *
- * 1. "Botfri månad" — 1. kvar månad kl 08:00
- *    Spelarar som ikkje fekk nokon bot førre månad → 70 kr
+ * 1. "Botfri månad" — Siste dagen kvar månad kl 08:00
+ *    Spelarar som ikkje fekk nokon bot denne månaden → 75 kr
  *
  * 2. "Forsein betaling" — 3. kvar månad kl 08:00 (2 dagar inn i ny månad)
  *    Spelarar med ubetalte bøter frå førre månad(ar) → 100 kr
@@ -19,25 +19,31 @@ async function getOrCreateFineType(name: string, amount: number, description: st
       data: { name, amount, description, category: 'Automatisk' },
     });
     console.log(`📋 Oppretta automatisk bøtetype: ${name}`);
+  } else if (ft.amount !== amount) {
+    ft = await prisma.fineType.update({
+      where: { id: ft.id },
+      data: { amount, description },
+    });
+    console.log(`📋 Oppdaterte beløp for ${name}: ${amount} kr`);
   }
   return ft;
 }
 
-/** 1. Gi 70 kr bot til spelarar utan bøter førre månad */
+/** 1. Gi 75 kr bot til spelarar utan bøter denne månaden */
 async function checkBotfriMaaned() {
   console.log('⏰ Køyrer sjekk: Botfri månad...');
 
   const now = new Date();
   const firstOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const firstOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
   // Alle spelarar
   const allPlayers = await prisma.player.findMany({ select: { id: true, name: true } });
 
-  // Spelarar som fekk minst éin bot i førre månad
+  // Spelarar som fekk minst éin bot denne månaden
   const playersWithFines = await prisma.fine.findMany({
     where: {
-      date: { gte: firstOfLastMonth, lt: firstOfThisMonth },
+      date: { gte: firstOfThisMonth, lt: tomorrow },
     },
     select: { playerId: true },
     distinct: ['playerId'],
@@ -51,14 +57,14 @@ async function checkBotfriMaaned() {
   );
 
   if (botfriePlayers.length === 0) {
-    console.log('  ✅ Alle spelarar hadde bøter i førre månad — ingen "botfri"-bot.');
+    console.log('  ✅ Alle spelarar hadde bøter denne månaden — ingen "botfri"-bot.');
     return;
   }
 
   const fineType = await getOrCreateFineType(
     'Botfri månad',
-    70,
-    'Automatisk bot for spelarar utan bøter førre månad'
+    75,
+    'Automatisk bot for spelarar utan bøter denne månaden'
   );
 
   for (const player of botfriePlayers) {
@@ -67,7 +73,7 @@ async function checkBotfriMaaned() {
         playerId: player.id,
         fineTypeId: fineType.id,
         amount: fineType.amount,
-        reason: 'Ingen bøter i førre månad — automatisk',
+        reason: 'Ingen bøter denne månaden — automatisk',
         date: new Date(),
       },
     });
@@ -140,12 +146,18 @@ async function checkForseinBetaling() {
 /** Start alle automatiske cron-jobbar */
 export function startScheduler() {
   console.log('🕐 Automatiske bøter aktivert:');
-  console.log('   • Botfri månad — 1. kvar månad kl 08:00');
+  console.log('   • Botfri månad — Siste dagen kvar månad kl 08:00');
   console.log('   • Forsein betaling — 3. kvar månad kl 08:00');
 
-  // 1. Botfri månad: køyr 1. kvar månad kl 08:00
-  cron.schedule('0 8 1 * *', () => {
-    checkBotfriMaaned().catch((err) => console.error('Botfri-sjekk feila:', err));
+  // 1. Botfri månad: køyr siste dag kvar månad kl 08:00
+  // Køyrer kl 08:00 kvar dag, men sjekkar om det er siste dag i månaden
+  cron.schedule('0 8 * * *', () => {
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    // Viss morgondagen er 1. i månaden → i dag er siste dag
+    if (tomorrow.getDate() === 1) {
+      checkBotfriMaaned().catch((err) => console.error('Botfri-sjekk feila:', err));
+    }
   });
 
   // 2. Forsein betaling: køyr 3. kvar månad kl 08:00 (2 dagar inn i ny månad)
