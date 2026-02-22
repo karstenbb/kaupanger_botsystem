@@ -86,8 +86,8 @@ export default function Layout() {
               <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Botsystem</span>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <NavLink to="/profil" style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }} title="Min profil">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <NavLink to="/profil" className="mobile-profile-btn" title="Min profil">
               <IconUser />
             </NavLink>
             <button className="logout-btn" onClick={logout}>

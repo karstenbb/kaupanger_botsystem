@@ -225,6 +225,27 @@ input, button, textarea, select {
   font-weight: 700;
 }
 
+.mobile-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.mobile-profile-btn:hover,
+.mobile-profile-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
 /* Bottom nav — mobile only */
 .bottom-nav {
   display: none;
