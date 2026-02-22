@@ -59,4 +59,18 @@ router.get('/summary', async (_req: Request, res: Response) => {
   }
 });
 
+/** GET /api/public/fine-types — Offentleg oversikt over bottypar (ingen innlogging) */
+router.get('/fine-types', async (_req: Request, res: Response) => {
+  try {
+    const fineTypes = await prisma.fineType.findMany({
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, amount: true, description: true },
+    });
+    res.json(fineTypes);
+  } catch (error) {
+    console.error('Public fine-types error:', error);
+    res.status(500).json({ error: 'Klarte ikkje hente bottypar' });
+  }
+});
+
 export default router;

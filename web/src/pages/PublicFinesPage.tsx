@@ -24,21 +24,32 @@ interface Summary {
   topPlayers: { name: string; total: number; count: number }[];
 }
 
+interface PublicFineType {
+  id: string;
+  name: string;
+  amount: number;
+  description: string | null;
+}
+
 export default function PublicFinesPage() {
   const [fines, setFines] = useState<PublicFine[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
+  const [fineTypes, setFineTypes] = useState<PublicFineType[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'ALL' | 'PAID' | 'UNPAID'>('ALL');
   const [search, setSearch] = useState('');
+  const [tab, setTab] = useState<'fines' | 'types'>('fines');
 
   useEffect(() => {
     Promise.all([
       axios.get(`${API}/public/fines`),
       axios.get(`${API}/public/summary`),
+      axios.get(`${API}/public/fine-types`),
     ])
-      .then(([finesRes, summaryRes]) => {
+      .then(([finesRes, summaryRes, typesRes]) => {
         setFines(finesRes.data);
         setSummary(summaryRes.data);
+        setFineTypes(typesRes.data);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -124,6 +135,55 @@ export default function PublicFinesPage() {
               </div>
             )}
 
+            {/* Tab switcher */}
+            <div className="public-tabs">
+              <button
+                className={`public-tab${tab === 'fines' ? ' active' : ''}`}
+                onClick={() => setTab('fines')}
+              >
+                📋 Registrerte bøter
+              </button>
+              <button
+                className={`public-tab${tab === 'types' ? ' active' : ''}`}
+                onClick={() => setTab('types')}
+              >
+                📖 Bottypar ({fineTypes.length})
+              </button>
+            </div>
+
+            {tab === 'types' ? (
+              /* Fine types overview */
+              <div className="public-card">
+                <div className="table-wrapper">
+                  <table className="public-table">
+                    <thead>
+                      <tr>
+                        <th>Namn</th>
+                        <th>Beløp</th>
+                        <th>Skildring</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {fineTypes.map((ft) => (
+                        <tr key={ft.id}>
+                          <td style={{ fontWeight: 600 }}>{ft.name}</td>
+                          <td className="public-amount">{ft.amount} kr</td>
+                          <td className="public-date">{ft.description || '—'}</td>
+                        </tr>
+                      ))}
+                      {fineTypes.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="text-center text-muted" style={{ padding: 48 }}>
+                            Ingen bottypar registrerte
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+            <>
             {/* Search & filter */}
             <div className="public-toolbar">
               <div className="public-search-wrap">
@@ -209,6 +269,8 @@ export default function PublicFinesPage() {
                 </table>
               </div>
             </div>
+            </>
+            )}
 
             {/* Footer */}
             <footer className="public-footer">
