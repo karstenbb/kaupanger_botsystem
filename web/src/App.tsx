@@ -10,6 +10,7 @@ import MyFinesPage from './pages/MyFinesPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import AdminPage from './pages/AdminPage';
 import ProfilePage from './pages/ProfilePage';
+import PublicFinesPage from './pages/PublicFinesPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -25,6 +26,7 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/offentleg" element={<PublicFinesPage />} />
       <Route
         path="/login"
         element={user ? <Navigate to="/" replace /> : <LoginPage />}
