@@ -83,9 +83,14 @@ export default function PublicFinesPage() {
               <span>Offentleg oversikt</span>
             </div>
           </div>
-          <Link to="/login" className="public-login-link">
-            Logg inn →
-          </Link>
+          <div className="public-header-links">
+            <Link to="/reglar" className="public-login-link">
+              📜 Reglar
+            </Link>
+            <Link to="/login" className="public-login-link">
+              Logg inn →
+            </Link>
+          </div>
         </div>
       </header>
 

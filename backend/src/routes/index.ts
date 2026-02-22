@@ -7,6 +7,7 @@ import leaderboardRoutes from './leaderboard';
 import dashboardRoutes from './dashboard';
 import schedulerRoutes from './scheduler';
 import publicRoutes from './public';
+import rulesRoutes from './rules';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/leaderboard', leaderboardRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/scheduler', schedulerRoutes);
 router.use('/public', publicRoutes);
+router.use('/rules', rulesRoutes);
 
 export default router;

@@ -29,9 +29,9 @@ router.get('/summary', async (_req: Request, res: Response) => {
       prisma.player.findMany(),
     ]);
 
-    const totalAmount = fines.reduce((sum, f) => sum + f.amount, 0);
-    const unpaidAmount = fines.filter((f) => f.status === 'UNPAID').reduce((sum, f) => sum + f.amount, 0);
-    const paidAmount = fines.filter((f) => f.status === 'PAID').reduce((sum, f) => sum + f.amount, 0);
+    const totalAmount = fines.reduce((sum: number, f: { amount: number }) => sum + f.amount, 0);
+    const unpaidAmount = fines.filter((f: { status: string }) => f.status === 'UNPAID').reduce((sum: number, f: { amount: number }) => sum + f.amount, 0);
+    const paidAmount = fines.filter((f: { status: string }) => f.status === 'PAID').reduce((sum: number, f: { amount: number }) => sum + f.amount, 0);
 
     // Top offenders
     const playerMap = new Map<string, { name: string; total: number; count: number }>();
@@ -70,6 +70,21 @@ router.get('/fine-types', async (_req: Request, res: Response) => {
   } catch (error) {
     console.error('Public fine-types error:', error);
     res.status(500).json({ error: 'Klarte ikkje hente bottypar' });
+  }
+});
+
+/** GET /api/public/rules — Offentleg reglar (ingen innlogging) */
+router.get('/rules', async (_req: Request, res: Response) => {
+  try {
+    const row = await prisma.siteContent.findUnique({ where: { key: 'rules' } });
+    if (!row) {
+      res.json({ content: '', updatedAt: null });
+      return;
+    }
+    res.json({ content: row.content, updatedAt: row.updatedAt });
+  } catch (error) {
+    console.error('Public rules error:', error);
+    res.status(500).json({ error: 'Klarte ikkje hente reglar' });
   }
 });
 

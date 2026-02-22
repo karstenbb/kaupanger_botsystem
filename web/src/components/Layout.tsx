@@ -12,6 +12,7 @@ import {
   IconFootball,
   IconWallet,
   IconUser,
+  IconBook,
 } from './Icons';
 
 export default function Layout() {
@@ -23,6 +24,7 @@ export default function Layout() {
     { to: '/spelarar', icon: <IconUsers />, label: 'Spelarar', shortLabel: 'Spelarar' },
     { to: '/boter', icon: <IconDocument />, label: 'Bøter', shortLabel: 'Bøter' },
     { to: '/toppliste', icon: <IconTrophy />, label: 'Toppliste', shortLabel: 'Topp' },
+    { to: '/botsystemreglar', icon: <IconBook />, label: 'Reglar', shortLabel: 'Reglar' },
     ...(isAdmin
       ? [{ to: '/admin', icon: <IconSettings />, label: 'Admin', shortLabel: 'Admin' }]
       : []),

@@ -11,6 +11,7 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import AdminPage from './pages/AdminPage';
 import ProfilePage from './pages/ProfilePage';
 import PublicFinesPage from './pages/PublicFinesPage';
+import RulesPage from './pages/RulesPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -27,6 +28,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/offentleg" element={<PublicFinesPage />} />
+      <Route path="/reglar" element={<RulesPage isPublic />} />
       <Route
         path="/login"
         element={user ? <Navigate to="/" replace /> : <LoginPage />}
@@ -46,6 +48,7 @@ function AppRoutes() {
         <Route path="/toppliste" element={<LeaderboardPage />} />
         <Route path="/profil" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/botsystemreglar" element={<RulesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

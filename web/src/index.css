@@ -1751,6 +1751,137 @@ tbody tr:last-child td {
   font-size: 13px;
 }
 
+.public-header-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Rules page ──────────────────────────────────────── */
+.rules-page {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.rules-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.rules-content h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(99,102,241,.3);
+}
+
+.rules-content h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #818cf8;
+  margin: 28px 0 12px;
+}
+
+.rules-content p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+.rules-content strong {
+  color: var(--text-primary);
+}
+
+.rules-content ul {
+  margin: 0 0 12px 20px;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+.rules-content ul li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.rules-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+.rules-updated {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.rules-edit-area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rules-textarea {
+  width: 100%;
+  min-height: 400px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 20px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.rules-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+}
+
+.rules-edit-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.rules-preview {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.rules-preview h3 {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+@media (max-width: 768px) {
+  .rules-card {
+    padding: 20px 16px;
+  }
+  .rules-content h1 {
+    font-size: 1.3rem;
+  }
+  .rules-textarea {
+    min-height: 300px;
+    font-size: 12px;
+  }
+}
+
 /* Public page responsive */
 @media (max-width: 768px) {
   .public-stats {
