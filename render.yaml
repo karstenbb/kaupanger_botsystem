@@ -26,3 +26,5 @@ services:
         value: 10000
       - key: CORS_ORIGIN
         value: https://kaupanger-botsystem.vercel.app
+      - key: RENDER_EXTERNAL_URL
+        value: https://kaupanger-botsystem.onrender.com

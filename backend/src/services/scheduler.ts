@@ -148,6 +148,7 @@ export function startScheduler() {
   console.log('🕐 Automatiske bøter aktivert:');
   console.log('   • Botfri månad — Siste dagen kvar månad kl 08:00');
   console.log('   • Forsein betaling — 3. kvar månad kl 08:00');
+  console.log('   • DB keep-alive — Kvart 10. minutt');
 
   // 1. Botfri månad: køyr siste dag kvar månad kl 08:00
   // Køyrer kl 08:00 kvar dag, men sjekkar om det er siste dag i månaden
@@ -164,6 +165,26 @@ export function startScheduler() {
   cron.schedule('0 8 3 * *', () => {
     checkForseinBetaling().catch((err) => console.error('Forsein-sjekk feila:', err));
   });
+
+  // 3. DB keep-alive — ping databasen kvart 10. minutt for å halde tilkoplinga varm
+  cron.schedule('*/10 * * * *', async () => {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+    } catch (err) {
+      console.error('DB keep-alive feila:', err);
+    }
+  });
+
+  // 4. Self-ping — ping eigen /health kvart 14. minutt for å hindre Render free-tier sleep
+  if (process.env.NODE_ENV === 'production' && process.env.RENDER_EXTERNAL_URL) {
+    const url = `${process.env.RENDER_EXTERNAL_URL}/health`;
+    cron.schedule('*/14 * * * *', async () => {
+      try {
+        await fetch(url);
+      } catch { /* stille feil */ }
+    });
+    console.log(`   • Self-ping — Kvart 14. minutt → ${url}`);
+  }
 }
 
 /** Eksporter funksjonane for manuell køyring / testing */
