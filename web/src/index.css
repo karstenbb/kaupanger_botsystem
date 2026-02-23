@@ -205,7 +205,9 @@ input, button, textarea, select {
 .page-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
+  min-width: 0;
 }
 
 /* Mobile header */
@@ -1769,6 +1771,15 @@ tbody tr:last-child td {
   border-radius: 12px;
   padding: 32px;
   margin-bottom: 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.rules-content {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .rules-content h1 {
@@ -1797,13 +1808,15 @@ tbody tr:last-child td {
   color: var(--text-primary);
 }
 
-.rules-content ul {
+.rules-content ul,
+.rules-content ol {
   margin: 0 0 12px 20px;
   padding: 0;
   color: var(--text-secondary);
 }
 
-.rules-content ul li {
+.rules-content ul li,
+.rules-content ol li {
   margin-bottom: 6px;
   line-height: 1.6;
 }
@@ -1871,10 +1884,14 @@ tbody tr:last-child td {
 
 @media (max-width: 768px) {
   .rules-card {
-    padding: 20px 16px;
+    padding: 16px 14px;
   }
   .rules-content h1 {
     font-size: 1.3rem;
+  }
+  .rules-content ul,
+  .rules-content ol {
+    margin-left: 16px;
   }
   .rules-textarea {
     min-height: 300px;
