@@ -1,21 +1,29 @@
 import { useEffect, useState } from 'react';
 import { fineTypesApi } from '../api/fineTypes';
+import { playersApi } from '../api/players';
 import client from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import Modal from '../components/Modal';
-import { IconPlus, IconEdit, IconTrash } from '../components/Icons';
-import type { FineType } from '../types';
+import { IconPlus, IconEdit, IconTrash, IconUsers } from '../components/Icons';
+import type { FineType, Player } from '../types';
 
 export default function AdminPage() {
   const { isAdmin } = useAuth();
   const [fineTypes, setFineTypes] = useState<FineType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Modal
+  // Modal bottypar
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<FineType | null>(null);
   const [form, setForm] = useState({ name: '', amount: '', description: '' });
   const [saving, setSaving] = useState(false);
+
+  // Spelarar
+  const [players, setPlayers] = useState<(Player & { birthDate?: string | null })[]>([]);
+  const [showPlayerModal, setShowPlayerModal] = useState(false);
+  const [editingPlayer, setEditingPlayer] = useState<(Player & { birthDate?: string | null }) | null>(null);
+  const [playerForm, setPlayerForm] = useState({ name: '', position: '', number: '', birthDate: '' });
+  const [savingPlayer, setSavingPlayer] = useState(false);
 
   // Automatiske bøter
   const [runningBotfri, setRunningBotfri] = useState(false);
@@ -26,7 +34,14 @@ export default function AdminPage() {
     fineTypesApi.getAll().then(setFineTypes).catch(console.error).finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  const loadPlayers = () => {
+    client.get('/players').then(({ data }) => setPlayers(data)).catch(console.error);
+  };
+
+  useEffect(() => {
+    load();
+    loadPlayers();
+  }, []);
 
   if (!isAdmin) {
     return (
@@ -84,6 +99,58 @@ export default function AdminPage() {
     }
   };
 
+  /* ── Spelar-handtering ─────────────────────────────────────────────── */
+  const openCreatePlayer = () => {
+    setEditingPlayer(null);
+    setPlayerForm({ name: '', position: '', number: '', birthDate: '' });
+    setShowPlayerModal(true);
+  };
+
+  const openEditPlayer = (p: Player & { birthDate?: string | null }) => {
+    setEditingPlayer(p);
+    setPlayerForm({
+      name: p.name,
+      position: p.position || '',
+      number: p.number != null ? String(p.number) : '',
+      birthDate: p.birthDate ? p.birthDate.slice(0, 10) : '',
+    });
+    setShowPlayerModal(true);
+  };
+
+  const handleSavePlayer = async () => {
+    if (!playerForm.name) return;
+    setSavingPlayer(true);
+    try {
+      const body: Record<string, unknown> = {
+        name: playerForm.name,
+        position: playerForm.position || null,
+        number: playerForm.number ? Number(playerForm.number) : null,
+        birthDate: playerForm.birthDate || null,
+      };
+      if (editingPlayer) {
+        await playersApi.update(editingPlayer.id, body as any);
+      } else {
+        await playersApi.create(body as any);
+      }
+      setShowPlayerModal(false);
+      loadPlayers();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSavingPlayer(false);
+    }
+  };
+
+  const handleDeletePlayer = async (id: string, name: string) => {
+    if (!confirm(`Er du sikker på at du vil slette ${name}? Alle bøtene til spelaren blir sletta.`)) return;
+    try {
+      await playersApi.delete(id);
+      loadPlayers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading) return <div className="loading-page"><div className="spinner" /></div>;
 
   const runBotfri = async () => {
@@ -116,7 +183,7 @@ export default function AdminPage() {
     <>
       <div className="page-header">
         <h2>Admin</h2>
-        <p>Administrer bottypar og automatiske bøter</p>
+        <p>Administrer spelarar, bottypar og automatiske bøter</p>
       </div>
 
       {/* Automatiske bøter */}
@@ -161,6 +228,60 @@ export default function AdminPage() {
               ✅ {schedulerMsg}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Spelarar */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card-header">
+          <h3><IconUsers /> Spelarar</h3>
+          <button className="btn btn-primary btn-sm" onClick={openCreatePlayer}>
+            <IconPlus /> Ny spelar
+          </button>
+        </div>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Namn</th>
+                <th>Posisjon</th>
+                <th>Nr</th>
+                <th>Fødselsdato</th>
+                <th>Bøter</th>
+                <th style={{ width: 120 }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {players.map((p) => (
+                <tr key={p.id}>
+                  <td style={{ fontWeight: 500 }}>{p.name}</td>
+                  <td style={{ color: 'var(--text-secondary)' }}>{p.position || '—'}</td>
+                  <td>{p.number ?? '—'}</td>
+                  <td style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
+                    {p.birthDate ? new Date(p.birthDate).toLocaleDateString('nb-NO') : '—'}
+                  </td>
+                  <td style={{ fontWeight: 600 }}>{p.totalFines} kr</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn btn-secondary btn-sm" onClick={() => openEditPlayer(p)}>
+                        <IconEdit />
+                      </button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDeletePlayer(p.id, p.name)}>
+                        <IconTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {players.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="text-center text-muted" style={{ padding: 32 }}>
+                    Ingen spelarar registrerte
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -254,6 +375,61 @@ export default function AdminPage() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Kort forklaring…"
+            />
+          </div>
+        </Modal>
+      )}
+
+      {showPlayerModal && (
+        <Modal
+          title={editingPlayer ? `Rediger ${editingPlayer.name}` : 'Ny spelar'}
+          onClose={() => setShowPlayerModal(false)}
+          footer={
+            <>
+              <button className="btn btn-secondary" onClick={() => setShowPlayerModal(false)}>
+                Avbryt
+              </button>
+              <button className="btn btn-primary" onClick={handleSavePlayer} disabled={savingPlayer}>
+                {savingPlayer ? 'Lagrar…' : editingPlayer ? 'Oppdater' : 'Opprett'}
+              </button>
+            </>
+          }
+        >
+          <div className="form-group">
+            <label className="form-label">Namn</label>
+            <input
+              className="form-input"
+              value={playerForm.name}
+              onChange={(e) => setPlayerForm({ ...playerForm, name: e.target.value })}
+              placeholder="Ola Nordmann"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Posisjon</label>
+            <input
+              className="form-input"
+              value={playerForm.position}
+              onChange={(e) => setPlayerForm({ ...playerForm, position: e.target.value })}
+              placeholder="T.d. Midtbane"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Draktnummer</label>
+            <input
+              className="form-input"
+              type="number"
+              value={playerForm.number}
+              onChange={(e) => setPlayerForm({ ...playerForm, number: e.target.value })}
+              placeholder="10"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Fødselsdato</label>
+            <input
+              className="form-input"
+              type="date"
+              value={playerForm.birthDate}
+              onChange={(e) => setPlayerForm({ ...playerForm, birthDate: e.target.value })}
             />
           </div>
         </Modal>

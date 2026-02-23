@@ -14,7 +14,7 @@ export const playersApi = {
     const { data } = await client.post('/players', body);
     return data;
   },
-  update: async (id: string, body: Partial<{ name: string; number: number; position: string }>): Promise<Player> => {
+  update: async (id: string, body: Partial<{ name: string; number: number; position: string; birthDate: string | null }>): Promise<Player> => {
     const { data } = await client.put(`/players/${id}`, body);
     return data;
   },

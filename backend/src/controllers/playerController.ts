@@ -24,6 +24,7 @@ export async function getPlayers(req: AuthRequest, res: Response): Promise<void>
         name: player.name,
         position: player.position,
         number: player.number,
+        birthDate: player.birthDate,
         avatarUrl: player.avatarUrl,
         createdAt: player.createdAt,
         updatedAt: player.updatedAt,
