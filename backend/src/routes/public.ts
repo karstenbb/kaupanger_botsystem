@@ -93,101 +93,124 @@ router.get('/rules', async (_req: Request, res: Response) => {
 });
 
 /* ── Default rules content (auto-seeded on first request) ────────── */
-const DEFAULT_RULES = `# Kaupanger botsystem
+export const DEFAULT_RULES = `# Kaupanger A-lag herrer: Botsystem
 
-Botsystemet har som funksjon å:
+## Formål
 
-1. **Skaffe penger til fellesskapet.** Sosialister jævler er vi.
-2. **Holde orden i rekkene.** Oppfør deg!
-3. **Skape latter (og sinne) i garderoben**
+Botsystemet har ein viktig rolle og funksjon i ein seniorgarderobe og laget. Dei overordna måla med botsystemet er å:
 
-Karsten Bjelde, Aleksander Belland og Nalawi Solomon er bot sjefar, det dei seier er dikkas lov når da gjeld bøtene. Er det noken som absolutt ikkje vil vere med i bot systemet pga. økonomi eller noke ant gi ein lyd til ein av oss, du treng ikkje oppgi grunn. Pengene går tilbake til fellesskapet som bidrar.
+1. **Skaffe pengar til fellesskapet.** Sosialistiske jævlar som er vi.
+2. **«Holde orden i rekkene».** Bidra til at du oppfører deg!
+3. **Skape glede (sinne) og latter i gruppa.**
 
-Null max grense for månedlig sats.
+## Grunnleggjande info
 
-**Trekning:**
-De 3 som bidrar minst til botkassen i løpet av måneden, får delta i en trekning, med herlige premiar (litt ironisk).
+Karsten Bjelde, Aleksander Belland Eriksen og Nalawi Solomon er botsjefar. Det dei seier er dikkast lov når da gjeld bøtene. Er det nokon som absolutt ikkje vil vere med i botsystemet, ta kontakt med ein av oss. Pengane går tilbake til fellesskapet som bidrar.
 
 **Innbetaling:**
-Innbetaling skal skje på månedens siste dag, hver måned. Dersom laget har aktivitet på månedens siste dag, har botsjef inntil 1 time etter forlatt garderobe på å føre bøter. Manglende betaling straffes med inkasso. Betales til +4797158329 (Karsten Bjelde på vipps).
+Innbetaling skal skje på månadens siste dag, kvar månad. Dersom laget har aktivitet på månadens siste dag, har botsjef inntil 2 timar på å føre bøter, etter aktivitetens slutt. Manglande betaling straffes med inkasso. Betalast til +4797158329 (Karsten Bjelde, vipps).
+
+**§ 69: Inkasso.** Å ikkje betale bøter innan fristen, straffast med ei bot på 50 kr per dag.
+
+**Trekning:**
+De 3 som bidrar minst økonomisk til botkassa i løpet av månaden, får delta i ein trekning med herlege premiar (litt ironisk).
 
 ---
 
-## § 69
-**Inkasso.** Ikkje betale bøter i tide, straffast med ei bot på 50 kr per dag.
+## Ynskje du rettssak?
+
+Dersom ein meina at bota ein har fått er tildelt på feil grunnlag, kan ein krevje rettssak. Dette gjerest på følgjande måte:
+
+- Mottakar av bota må sende melding til ein av botsjefane. Innsendar må vise til kva for ein bot vedkommande klagar på. Krav om rettssak må sendast innan 7 dagar frå bota er registrert. Ved innsending av krav på rettssak vil mottakar motta eit klagegebyr på 50 kr. Gebyret refunderast ved vunne sak. Botsjefane har ansvar for å sette ein dato for rettssak innan rimeleg tid.
+
+**Gjennomføring av rettssak:**
+Rettssaka gjennomførast på ein tradisjonell måte: «Ein er skyldig til da motsette er bevist».
+
+1. **Aktor:** Botsjefane fungera som aktor
+2. **Advokat:** Om ynskjeleg, har siktande rett på advokat. Botsjefane tildeler ved behov.
+3. **Jury:** Består av minimum 3 spelarar over 18 år. Botsjefane har ansvar for å sette jury. Ein skal etter beste evne forsøke skape ein jury med ulik alderssamansetning.
+4. **Aktoratet opnar** og fortel kva saken gjeld. Den siktande kjem med si forklaring.
+5. **Aktoratet får tildelt ordet.**
+6. **Før juryen trekker seg tilbake.** Når juryen er klar, avleggs dommen.
+
+Ved tap i rettssaka, vil bota dobles, og gebyr betalast ikkje tilbake.
 
 ---
 
 ## Kapittel 1: Trening
 
+**§ 1-0**
+Ikkje møte på trening når du er påmeldt. **150 kr.**
+
 **§ 1-1**
-Ikkje møte på trening uten gyldig grunn. Gyldig grunn kan vere jobb, sjukdom, skade og planlagt ferie. Å gjere lekser/lese teller ikkje som gyldig grunn med mindre det er skuletur, klassetur osv. **100 kr.**
+Ikkje møte på trening utan gyldig grunn. **100 kr.**
+Gyldig grunn kan vere jobb, sjukdom, skade og planlagt ferie. Å gjere lekser/lese teller ikkje som gyldig grunn med mindre det er skuletur, klassetur osv.
 
 **§ 1-2**
 Komme forseint til treningsstart. **100 kr.**
-Du er ikke klar når trening starter.
+Du er ikkje på plass før treninga startar.
 
 **§ 1-3**
-Komme for sent til oppmøte. Oppmøte er satt minst 15 min før trening.
-Døme: Oppmøte er 18.15, dersom klokken er 18.15 når du kommer inn døren, så er du for sen.
+Komme for seint til oppmøte. Oppmøte er satt minst 15 min før trening. **40 kr.**
+Døme: Oppmøte er 18.15, dersom klokken er 18.15 når du kjem inn døra, så er du for sein.
 
 **§ 1-4**
-Tunnel i firkant. Du blir slått tunnel på, hvor medspiller får touch på ballen etter tunnelen. **20 kr.**
+Tunnel i firkant. Du blir slått tunnel på, og medspelar får touch på ballen etter tunnelen (inni firkanten). **20 kr.**
 
 **§ 1-5**
-Ball ut av stadion. Du skyter ballen over nettet bak mål. Gjeld kun på kamp. **25 kr.**
+Ball ut av stadion. Du skyter ballen over nettet bak mål. Gjeld kun på trening. **20 kr.**
 
 **§ 1-6**
-Do-pause. **25 kr.**
-Du forlater en trening som har startet for å gå på do.
+Do-pause. **30 kr.**
+Du forlate ein trening som har starta for å gå på do.
 
 **§ 1-7**
-Feil farge på treningstøy. **50 kr.**
-Du trener i annen farge enn grønn.
+Feil farge på treningsoverdel. **50 kr.**
+Du trener i anna farge enn grøn.
 
 **§ 1-8**
 Feil klubblogo. **50 kr.**
-Du trener med en annen klubb sin logo på treningstøyet.
+Du trener med ein anna klubb sin logo på treningstøyet.
 
 **§ 1-9**
 Taper botkonkurranse. **20 kr.**
-Det gjennomføres botkonkurranser et par ganger i måneden. De som feiler, eller taper (3 stk.) konkurransen blir dømt til bot.
+Det gjennomførast botkonkurransar eit par gonger i månaden. Dei som feilar, eller taper (3 stk.) konkurransen blir dømt til bot.
 
 **§ 1-10**
-Gløymt personlig utstyr (gjeld alt, fra flaske til såle). **50 kr.**
+Gløymt personleg utstyr (gjeld alt, frå flaske til såle). **Grunnsum 50 kr., +25 kr. pr. gjenstand.**
 
 **§ 1-11**
-De fire yngste på trening har ansvar for å ut og inn utstyr. (Transportere utstyr til og fra feltet, telle og pumpe balla og koste garderoben). ALLE spillere skal hjelpe å samle inn. **50 kr.**
+De fire yngste på trening har ansvar for å ut og inn utstyr. (Transportere utstyr til og frå feltet, telle og pumpe balla og koste garderoben). ALLE spelarar skal hjelpe å samle inn. **50 kr.**
 
 ---
 
 ## Kapittel 2: Kamp
 
 **§ 2-1**
-Ikkje møte på kamp, uten å melde forfall innen rimelig tid. **500 kr.**
-Botsjefene avgjør hva som er rimelig tid.
+Ikkje møte på kamp, utan å melde forfall innan rimeleg tid. **500 kr.**
+Botsjefane avgjer kva som er rimeleg tid.
 
 **§ 2-2**
 Forfall til kamp, som følge av sløv prioritering. **100 kr.**
-Du melder forfall fordi du ikke har strukturert egen hverdag godt nok.
+Du melder forfall fordi du ikkje har strukturert eigen kvardag godt nok.
 
 **§ 2-3**
 Konfirmasjonsbot. **50 kr.**
-Du går glipp av kamp fordi du prioriterer komfirmasjon.
+Du går glipp av kamp fordi du prioriterer konfirmasjon.
 
 **§ 2-4**
-Komme for sent til oppmøte. **100 kr.**
-Døme: Oppmøte er 18.15, dersom klokken er 18.15 når du kommer inn døren, så er du for sen.
+Komme for seint til oppmøte. **100 kr.**
+Døme: Oppmøte er 18.15, dersom klokken er 18.15 når du kjem inn døra, så er du for sein.
 
 **§ 2-5**
-Komme forseint til Kampstart. **500 kr.**
-Gjelder ikke dersom en har god dialog med trenerteam/botsjef (Karsten).
+Komme forseint til kampstart. **350 kr.**
+Gjelder ikkje dersom ein har god dialog med trenarteam/botsjef (Karsten).
 
 **§ 2-6**
-Gløymt nødvendig kamputstyr (Sko, leggskinn og evt. Annet som ikke). **100 kr.**
+Gløymt nødvendig kamputstyr (sko, leggskinn og evt. anna som ein må ha med). **100 kr.**
 
 **§ 2-7**
-Gløymt utstyr etter kamp (gjeld alt, fra flaske, sko, bukse osv.). **50 kr.**
+Gløymt utstyr etter kamp (gjeld alt, frå flaske, sko, bukse osv.). **Grunnsum 50 kr., +25 kr. pr. gjenstand.**
 
 **§ 2-8**
 Unødvendig gult kort. **100 kr.**
@@ -196,65 +219,71 @@ Unødvendig gult kort. **100 kr.**
 Unødvendig rødt kort. **200 kr.**
 
 **§ 2-10**
-Feilkast. Dommeren dømmer. **50 kr.**
+Feilkast. Dommaren dømmer. **50 kr.**
 
 ---
 
-## Kapittel 3: Uønsket atferd
+## Kapittel 3: Uynskt åtferd
 
 **§ 3-1**
-Ikkje ta med bursdagskake den uken du har bursdag. **200 kr.**
+Ikkje ta med bursdagskake den veka du har bursdag. **200 kr.**
 
 **§ 3-2**
-Provoserende atferd mot botsjef. **50 kr.**
+Provoserande åtferd mot botsjef. **50 kr.**
 Eksempel: fått ein klar bot, men klaga likevel til botsjefane. Botsjefane bestemme kva klaging er.
 
 **§ 3-3**
-Idiotbot. Du oppfører deg, eller fremstår som en tulling. **10–300 kr.**
-Botsjefene avgjør, men er veldig glad i innmeldte saker. Summen avgjøres på alvorlighetsgrad av synden.
+Idiotbot. Du oppfører deg, eller fremstår som ein tulling. **10–300 kr.**
+Botsjefane avgjer. Vi er veldig glad i innmeldte saker. Summen avgjerast på alvoret av synda.
 
 **§ 3-4**
 Lygebot. Du blir tatt i løgn. **50 kr.**
-Døme: Spør ein av oss botsjefar om du har fått tunnel i firkant og du svarar nei, men vitner i firkanten (minimum 2) seier du har blitt tatt tunnel på. Da får du lygebot i tillegg til tunnellen.
+Døme: Spør ein av oss botsjefar om du har fått tunnel i firkant og du svarar nei, men vitnar i firkanten (minimum 2) seier du har blitt tatt tunnel på. Da får du lygebot, i tillegg til tunnelen.
 
 **§ 3-5**
 Fylla dagen før kamp. **200 kr.**
-Du er full på fest dagen før kamp. Vitner sier du var full.
+Du er full på fest dagen før kamp. Vitnar siar du var full.
 
 **§ 3-6**
-Ikke møte på lagfest. **25 kr. eller 200 kr.**
-Summen settes etter hvor godt planlagt festen er, og evt. Årsak for å ikke delta.
+Ikkje møte på lagfest. **25 kr. eller 200 kr.**
+Summen setjast etter kor godt planlagt festen er, og evt. årsak for å ikkje delta.
 
 **§ 3-7**
-Pisse i dusjen i laget garderobe. **200 kr.**
+Pisse i dusjen i vårt lags garderobe. **200 kr.**
 
 **§ 3-8**
 Mobil i garderoben. **25 kr.**
-Du bruker mobilen i garderoben i oppmøtetid. Unntak: DJ kan styre musikk og botsjefer for relevant arbeid.
+Du bruker mobilen i garderoben i oppmøtetid og etter trening/kamp, så lenge laget er samla. Området rundt benkene teller som garderobe når vi er i hallen.
+Unntak: DJ kan styre musikk og botsjefar for relevant arbeid.
 
 **§ 3-9**
-Hodeplagg inn i garderoben. **20 kr.**
-Du har på hodeplagg når du går over «dørstokken» inn i garderoben/klubben. Døren inn i fotballhallen teller som garderobe når vi ikke benytter garderobe/klubben.
+Hovudplagg inn i garderoben. **20 kr.**
+Du har på hovudplagg når du går over «dørstokken» inn i garderoben/klubben. Døra inn i fotballhallen teller som garderobe når vi ikkje benytter garderobe/klubben.
 
 **§ 3-10**
-Manglende bidrag til botkassen. **75 kr.**
-Du bidrar ikke til fellesskapet gjennom botkassen, og straffes for dårlig lagånd.
+Manglande bidrag til botkassa. **75 kr.**
+Du bidreg ikkje til fellesskapet gjennom botkassa, og straffes for dårleg lagånd.
 
 **§ 3-11**
 Mediebot. **50 kr.**
-Du intervjues av media uten gi Kaupanger en «Shoutout».
-Døme: Manglende klubbtøy, introdusert som Kaupanger-spiller, eller sier noe om Kaupanger fotball.
+Du intervjus av media utan å gi Kaupanger ein «Shoutout».
+Døme: Manglande klubbtøy, introdusert som Kaupanger-spelar, eller ikkje siar noko om Kaupanger fotball.
 
 ---
 
 ## Kapittel 4: Spond
 
 **§ 4-1**
-Svarfrist søndag for deltakelse på denne ukens treninger. **50 kr.**
-Unntak: Uforutsette ting. Botsjefer avgjør hva som er godkjent og ikke.
+Svarfrist søndag for deltaking på denne vekas treningar. **50 kr.**
+Unntak: Uforutsette ting. Botsjefar avgjer kva som er godkjent og ikkje.
 
 **§ 4-2**
-Forfall til trening grunnet uforutsette hendelser etter 12.00 på treningsdag. **50 kr.**
-Unntak: dersom botsjef mener du har en god nok grunn.`;
+Forfall til trening grunna uforutsette hendingar etter 12.00 på treningsdag. **50 kr.**
+Unntak: dersom botsjefar meinar du har ein god nok grunn.
+
+---
+
+**Generelt:**
+Ingen fritak grunna manglande nynorskforståing eller skrivefeil i regelverket.`;
 
 export default router;
