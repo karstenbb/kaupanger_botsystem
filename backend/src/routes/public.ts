@@ -99,20 +99,20 @@ export const DEFAULT_RULES = `# Kaupanger A-lag herrer: Botsystem
 
 Botsystemet har ein viktig rolle og funksjon i ein seniorgarderobe og laget. Dei overordna måla med botsystemet er å:
 
-1. **Skaffe pengar til fellesskapet.** Sosialistiske jævlar som er vi.
-2. **«Holde orden i rekkene».** Bidra til at du oppfører deg!
-3. **Skape glede (sinne) og latter i gruppa.**
+1. Skaffe pengar til fellesskapet. Sosialistiske jævlar som er vi.
+2. «Holde orden i rekkene». Bidra til at du oppfører deg!
+3. Skape glede (sinne) og latter i gruppa.
 
 ## Grunnleggjande info
 
 Karsten Bjelde, Aleksander Belland Eriksen og Nalawi Solomon er botsjefar. Det dei seier er dikkast lov når da gjeld bøtene. Er det nokon som absolutt ikkje vil vere med i botsystemet, ta kontakt med ein av oss. Pengane går tilbake til fellesskapet som bidrar.
 
-**Innbetaling:**
+Innbetaling:
 Innbetaling skal skje på månadens siste dag, kvar månad. Dersom laget har aktivitet på månadens siste dag, har botsjef inntil 2 timar på å føre bøter, etter aktivitetens slutt. Manglande betaling straffes med inkasso. Betalast til +4797158329 (Karsten Bjelde, vipps).
 
-**§ 69: Inkasso.** Å ikkje betale bøter innan fristen, straffast med ei bot på 50 kr per dag.
+**§ 69:** Inkasso. Å ikkje betale bøter innan fristen, straffast med ei bot på **50 kr.** per dag.
 
-**Trekning:**
+Trekning:
 De 3 som bidrar minst økonomisk til botkassa i løpet av månaden, får delta i ein trekning med herlege premiar (litt ironisk).
 
 ---
@@ -123,15 +123,15 @@ Dersom ein meina at bota ein har fått er tildelt på feil grunnlag, kan ein kre
 
 - Mottakar av bota må sende melding til ein av botsjefane. Innsendar må vise til kva for ein bot vedkommande klagar på. Krav om rettssak må sendast innan 7 dagar frå bota er registrert. Ved innsending av krav på rettssak vil mottakar motta eit klagegebyr på 50 kr. Gebyret refunderast ved vunne sak. Botsjefane har ansvar for å sette ein dato for rettssak innan rimeleg tid.
 
-**Gjennomføring av rettssak:**
+Gjennomføring av rettssak:
 Rettssaka gjennomførast på ein tradisjonell måte: «Ein er skyldig til da motsette er bevist».
 
-1. **Aktor:** Botsjefane fungera som aktor
-2. **Advokat:** Om ynskjeleg, har siktande rett på advokat. Botsjefane tildeler ved behov.
-3. **Jury:** Består av minimum 3 spelarar over 18 år. Botsjefane har ansvar for å sette jury. Ein skal etter beste evne forsøke skape ein jury med ulik alderssamansetning.
-4. **Aktoratet opnar** og fortel kva saken gjeld. Den siktande kjem med si forklaring.
-5. **Aktoratet får tildelt ordet.**
-6. **Før juryen trekker seg tilbake.** Når juryen er klar, avleggs dommen.
+1. Aktor: Botsjefane fungera som aktor
+2. Advokat: Om ynskjeleg, har siktande rett på advokat. Botsjefane tildeler ved behov.
+3. Jury: Består av minimum 3 spelarar over 18 år. Botsjefane har ansvar for å sette jury. Ein skal etter beste evne forsøke skape ein jury med ulik alderssamansetning.
+4. Aktoratet opnar og fortel kva saken gjeld. Den siktande kjem med si forklaring.
+5. Aktoratet får tildelt ordet.
+6. Før juryen trekker seg tilbake. Når juryen er klar, avleggs dommen.
 
 Ved tap i rettssaka, vil bota dobles, og gebyr betalast ikkje tilbake.
 
@@ -177,7 +177,7 @@ Taper botkonkurranse. **20 kr.**
 Det gjennomførast botkonkurransar eit par gonger i månaden. Dei som feilar, eller taper (3 stk.) konkurransen blir dømt til bot.
 
 **§ 1-10**
-Gløymt personleg utstyr (gjeld alt, frå flaske til såle). **Grunnsum 50 kr., +25 kr. pr. gjenstand.**
+Gløymt personleg utstyr (gjeld alt, frå flaske til såle). Grunnsum **50 kr.**, +**25 kr.** pr. gjenstand.
 
 **§ 1-11**
 De fire yngste på trening har ansvar for å ut og inn utstyr. (Transportere utstyr til og frå feltet, telle og pumpe balla og koste garderoben). ALLE spelarar skal hjelpe å samle inn. **50 kr.**
@@ -210,7 +210,7 @@ Gjelder ikkje dersom ein har god dialog med trenarteam/botsjef (Karsten).
 Gløymt nødvendig kamputstyr (sko, leggskinn og evt. anna som ein må ha med). **100 kr.**
 
 **§ 2-7**
-Gløymt utstyr etter kamp (gjeld alt, frå flaske, sko, bukse osv.). **Grunnsum 50 kr., +25 kr. pr. gjenstand.**
+Gløymt utstyr etter kamp (gjeld alt, frå flaske, sko, bukse osv.). Grunnsum **50 kr.**, +**25 kr.** pr. gjenstand.
 
 **§ 2-8**
 Unødvendig gult kort. **100 kr.**
@@ -245,7 +245,7 @@ Fylla dagen før kamp. **200 kr.**
 Du er full på fest dagen før kamp. Vitnar siar du var full.
 
 **§ 3-6**
-Ikkje møte på lagfest. **25 kr. eller 200 kr.**
+Ikkje møte på lagfest. **25 kr.** eller **200 kr.**
 Summen setjast etter kor godt planlagt festen er, og evt. årsak for å ikkje delta.
 
 **§ 3-7**
@@ -283,7 +283,7 @@ Unntak: dersom botsjefar meinar du har ein god nok grunn.
 
 ---
 
-**Generelt:**
+Generelt:
 Ingen fritak grunna manglande nynorskforståing eller skrivefeil i regelverket.`;
 
 export default router;

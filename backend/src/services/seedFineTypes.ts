@@ -6,7 +6,7 @@ import { DEFAULT_RULES } from '../routes/public';
  * Bruker versjonering og upsert-logikk slik at endringar i summar vert oppdatert.
  */
 export async function seedDefaultFineTypes() {
-  const EXPECTED_VERSION = '2026-02-23';
+  const EXPECTED_VERSION = '2025-06-18';
 
   // Sjekk om denne versjonen allereie er seeda
   const versionRow = await prisma.siteContent.findUnique({ where: { key: 'fineTypesVersion' } });
