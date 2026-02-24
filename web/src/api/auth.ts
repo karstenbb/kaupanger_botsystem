@@ -18,6 +18,7 @@ export interface UpdateProfileBody {
   position?: string;
   number?: number;
   birthDate?: string;
+  avatarUrl?: string | null;
 }
 
 export interface BirthdayPlayer {

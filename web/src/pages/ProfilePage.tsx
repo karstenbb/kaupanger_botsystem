@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { authApi } from '../api/auth';
 import type { UpdateProfileBody } from '../api/auth';
 import Avatar from '../components/Avatar';
+import client from '../api/client';
 import { IconCheck } from '../components/Icons';
 
 export default function ProfilePage() {
@@ -20,6 +21,7 @@ export default function ProfilePage() {
     birthDate: '',
     newPassword: '',
     confirmPassword: '',
+    avatarUrl: '',
   });
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export default function ProfilePage() {
           birthDate: profile.player?.birthDate
             ? new Date(profile.player.birthDate).toISOString().split('T')[0]
             : '',
+          avatarUrl: profile.player?.avatarUrl || '',
           newPassword: '',
           confirmPassword: '',
         });
@@ -66,6 +69,7 @@ export default function ProfilePage() {
       if (form.number) body.number = Number(form.number);
       if (form.birthDate) body.birthDate = form.birthDate;
 
+      if (form.avatarUrl) body.avatarUrl = form.avatarUrl;
       await authApi.updateProfile(body);
       await refreshProfile();
       setForm((f) => ({ ...f, newPassword: '', confirmPassword: '' }));
@@ -94,7 +98,40 @@ export default function ProfilePage() {
         {/* Profile card */}
         <div className="card profile-card">
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 20px 24px' }}>
-            <Avatar name={form.name || user?.username || '?'} size="lg" />
+            <Avatar name={form.name || user?.username || '?'} size="lg" src={form.avatarUrl} />
+            <form style={{ marginTop: 12, marginBottom: 8, textAlign: 'center' }}>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="profile-image-upload"
+                onChange={async (e) => {
+                  if (!e.target.files || !e.target.files[0]) return;
+                  const file = e.target.files[0];
+                  const formData = new FormData();
+                  formData.append('image', file);
+                  setMessage(null);
+                  try {
+                    const res = await client.post('/upload/profile-image', formData, {
+                      headers: { 'Content-Type': 'multipart/form-data' },
+                    });
+                    setForm((f) => ({ ...f, avatarUrl: res.data.url }));
+                    setMessage({ type: 'success', text: 'Profilbilde lasta opp!' });
+                  } catch (err) {
+                    setMessage({ type: 'error', text: 'Klarte ikkje laste opp bilde' });
+                  }
+                }}
+              />
+              <label htmlFor="profile-image-upload" className="btn btn-secondary" style={{ marginTop: 8, cursor: 'pointer' }}>
+                Last opp profilbilde
+              </label>
+              {form.avatarUrl && (
+                <button type="button" className="btn btn-link" style={{ color: '#ef4444', marginLeft: 8 }}
+                  onClick={() => setForm((f) => ({ ...f, avatarUrl: '' }))}>
+                  Fjern bilde
+                </button>
+              )}
+            </form>
             <h3 style={{ marginTop: 16, fontSize: 20 }}>{form.name || user?.username}</h3>
             <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
               {user?.role === 'ADMIN' ? '🛡️ Administrator' : '⚽ Spelar'}

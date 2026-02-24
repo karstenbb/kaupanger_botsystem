@@ -22,11 +22,23 @@ function getInitials(name: string): string {
 export default function Avatar({
   name,
   size = 'md',
+  src,
 }: {
   name: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  src?: string | null;
 }) {
   const cls = `avatar${size !== 'md' ? ` avatar-${size}` : ''}`;
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        className={cls}
+        style={{ objectFit: 'cover', background: '#eee' }}
+      />
+    );
+  }
   return (
     <div className={cls} style={{ background: getColor(name), color: '#fff' }}>
       {getInitials(name)}

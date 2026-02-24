@@ -14,6 +14,7 @@ export interface Player {
   name: string;
   number: number | null;
   position: string | null;
+  avatarUrl?: string | null;
   totalFines: number;
   totalPaid: number;
   totalUnpaid: number;
