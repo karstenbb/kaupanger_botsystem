@@ -8,6 +8,7 @@ import dashboardRoutes from './dashboard';
 import schedulerRoutes from './scheduler';
 import publicRoutes from './public';
 import rulesRoutes from './rules';
+import uploadRoutes from './upload';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/dashboard', dashboardRoutes);
 router.use('/scheduler', schedulerRoutes);
 router.use('/public', publicRoutes);
 router.use('/rules', rulesRoutes);
+router.use('/upload', uploadRoutes);
 
 export default router;

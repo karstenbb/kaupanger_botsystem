@@ -108,7 +108,7 @@ export async function getProfile(req: AuthRequest, res: Response): Promise<void>
 /** PUT /api/auth/profile — Update own profile */
 export async function updateProfile(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const { username, email, password, name, position, number, birthDate } = req.body;
+    const { username, email, password, name, position, number, birthDate, avatarUrl } = req.body;
 
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
@@ -168,6 +168,7 @@ export async function updateProfile(req: AuthRequest, res: Response): Promise<vo
       if (position !== undefined) playerData.position = position || null;
       if (number !== undefined) playerData.number = number ? Number(number) : null;
       if (birthDate !== undefined) playerData.birthDate = birthDate ? new Date(birthDate) : null;
+      if (avatarUrl !== undefined) playerData.avatarUrl = avatarUrl || null;
 
       if (Object.keys(playerData).length > 0) {
         await prisma.player.update({

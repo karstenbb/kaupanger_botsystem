@@ -26,6 +26,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 // Health check — pingar DB for å halde tilkoplinga varm
 app.get('/health', async (_req, res) => {
