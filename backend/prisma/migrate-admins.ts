@@ -71,7 +71,38 @@ async function main() {
     console.log('ℹ️  Brukar oppdatert til ADMIN: aleksander');
   }
 
-  // ── 3. Fjern gammal "admin" brukar og "Admin" spelar ─────────────
+  // ── 3. Opprett Nalawi Foto Solomon ───────────────────────────────
+  let nalawiPlayer = await prisma.player.findFirst({ where: { name: 'Nalawi Foto Solomon' } });
+  if (!nalawiPlayer) {
+    nalawiPlayer = await prisma.player.create({
+      data: { name: 'Nalawi Foto Solomon', position: 'Angriper', number: null },
+    });
+    console.log('✅ Oppretta spelar: Nalawi Foto Solomon');
+  } else {
+    console.log('ℹ️  Spelar finst allereie: Nalawi Foto Solomon');
+  }
+
+  const nalawiUser = await prisma.user.findFirst({ where: { playerId: nalawiPlayer.id } });
+  if (!nalawiUser) {
+    await prisma.user.create({
+      data: {
+        username: 'nalawi',
+        email: 'nalawi@kaupanger.no',
+        password,
+        role: 'ADMIN',
+        playerId: nalawiPlayer.id,
+      },
+    });
+    console.log('✅ Oppretta admin-brukar: nalawi');
+  } else {
+    await prisma.user.update({
+      where: { id: nalawiUser.id },
+      data: { role: 'ADMIN' },
+    });
+    console.log('ℹ️  Brukar oppdatert til ADMIN: nalawi');
+  }
+
+  // ── 4. Fjern gammal "admin" brukar og "Admin" spelar ─────────────
   const oldAdmin = await prisma.user.findFirst({ where: { username: 'admin' } });
   if (oldAdmin) {
     // Flytt eventuelle bøter som peikar på Admin-spelaren
@@ -98,6 +129,7 @@ async function main() {
   console.log('\n─────────────────────────────────────');
   console.log('👤 Admin 1: karsten / admin123');
   console.log('👤 Admin 2: aleksander / admin123');
+  console.log('👤 Admin 3: nalawi / admin123');
   console.log('─────────────────────────────────────');
 }
 

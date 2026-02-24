@@ -22,6 +22,10 @@ async function main() {
     data: { name: 'Aleksander Belland', position: 'Forsvar', number: null },
   });
 
+  const nalawiPlayer = await prisma.player.create({
+    data: { name: 'Nalawi Foto Solomon', position: 'Angriper', number: null },
+  });
+
   // ── Create Admin Users ─────────────────────────────────────────────
   const adminPassword = await bcrypt.hash('admin123', 12);
 
@@ -42,6 +46,16 @@ async function main() {
       password: adminPassword,
       role: 'ADMIN',
       playerId: aleksanderPlayer.id,
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      username: 'nalawi',
+      email: 'nalawi@kaupanger.no',
+      password: adminPassword,
+      role: 'ADMIN',
+      playerId: nalawiPlayer.id,
     },
   });
 
@@ -299,6 +313,7 @@ Ingen fritak grunna manglande nynorskforståing eller skrivefeil i regelverket.`
   console.log('─────────────────────────────────────');
   console.log('👤 Admin 1: karsten / admin123');
   console.log('👤 Admin 2: aleksander / admin123');
+  console.log('👤 Admin 3: nalawi / admin123');
   console.log(`📋 Fine Types: ${fineTypes.length}`);
   console.log('📜 Rules page content seeded');
   console.log('─────────────────────────────────────');

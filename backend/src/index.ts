@@ -2,6 +2,7 @@ import app from './app';
 import { config } from './config';
 import { startScheduler } from './services/scheduler';
 import { seedDefaultFineTypes } from './services/seedFineTypes';
+import { seedAdmins } from './services/seedAdmins';
 import { connectDatabase, disconnectDatabase } from './services/prisma';
 
 const start = async () => {
@@ -11,6 +12,9 @@ const start = async () => {
 
     // Seed bottypar viss tabellen er tom (første deploy)
     await seedDefaultFineTypes();
+
+    // Sikre at alle admin-brukarar finst
+    await seedAdmins();
 
     const server = app.listen(config.port, () => {
       console.log(`🚀 Server running on http://localhost:${config.port}`);
