@@ -28,6 +28,7 @@ export async function getPlayers(req: AuthRequest, res: Response): Promise<void>
         avatarUrl: player.avatarUrl,
         createdAt: player.createdAt,
         updatedAt: player.updatedAt,
+        user: player.user || null,
         totalFines,
         totalUnpaid: unpaidFines,
         totalPaid: totalFines - unpaidFines,
@@ -123,6 +124,43 @@ export async function updatePlayer(req: AuthRequest, res: Response): Promise<voi
   } catch (error) {
     console.error('Update player error:', error);
     res.status(500).json({ error: 'Klarte ikkje oppdatere spelar' });
+  }
+}
+
+/** PUT /api/players/:id/role — Toggle player role (admin only) */
+export async function updatePlayerRole(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!role || !['ADMIN', 'USER'].includes(role)) {
+      res.status(400).json({ error: 'Rolle må vere ADMIN eller USER' });
+      return;
+    }
+
+    // Finn brukaren knytt til spelaren
+    const user = await prisma.user.findFirst({ where: { playerId: id } });
+    if (!user) {
+      res.status(404).json({ error: 'Ingen brukar knytt til denne spelaren' });
+      return;
+    }
+
+    // Ikkje la admin fjerne sin eigen admin-tilgang
+    if (user.id === req.userId && role === 'USER') {
+      res.status(400).json({ error: 'Du kan ikkje fjerne din eigen admin-tilgang' });
+      return;
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: user.id },
+      data: { role },
+      select: { id: true, username: true, role: true },
+    });
+
+    res.json(updated);
+  } catch (error) {
+    console.error('Update player role error:', error);
+    res.status(500).json({ error: 'Klarte ikkje oppdatere rolle' });
   }
 }
 

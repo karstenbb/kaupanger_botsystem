@@ -151,6 +151,16 @@ export default function AdminPage() {
     }
   };
 
+  const handleToggleRole = async (playerId: string, currentRole: string) => {
+    const newRole = currentRole === 'ADMIN' ? 'USER' : 'ADMIN';
+    try {
+      await playersApi.updateRole(playerId, newRole);
+      loadPlayers();
+    } catch (err: any) {
+      alert(err?.response?.data?.error || 'Klarte ikkje endre rolle');
+    }
+  };
+
   if (loading) return <div className="loading-page"><div className="spinner" /></div>;
 
   const runBotfri = async () => {
@@ -246,6 +256,7 @@ export default function AdminPage() {
                 <th>Namn</th>
                 <th>Posisjon</th>
                 <th>Nr</th>
+                <th>Rolle</th>
                 <th>Fødselsdato</th>
                 <th>Bøter</th>
                 <th style={{ width: 120 }}></th>
@@ -257,6 +268,19 @@ export default function AdminPage() {
                   <td style={{ fontWeight: 500 }}>{p.name}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>{p.position || '—'}</td>
                   <td>{p.number ?? '—'}</td>
+                  <td>
+                    {(p as any).user ? (
+                      <button
+                        className={`btn btn-sm ${(p as any).user.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}`}
+                        style={{ fontSize: 11, padding: '2px 10px', minWidth: 60 }}
+                        onClick={() => handleToggleRole(p.id, (p as any).user.role)}
+                      >
+                        {(p as any).user.role === 'ADMIN' ? '⭐ Admin' : 'Brukar'}
+                      </button>
+                    ) : (
+                      <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>Ingen brukar</span>
+                    )}
+                  </td>
                   <td style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
                     {p.birthDate ? new Date(p.birthDate).toLocaleDateString('nb-NO') : '—'}
                   </td>
@@ -275,7 +299,7 @@ export default function AdminPage() {
               ))}
               {players.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="text-center text-muted" style={{ padding: 32 }}>
+                  <td colSpan={7} className="text-center text-muted" style={{ padding: 32 }}>
                     Ingen spelarar registrerte
                   </td>
                 </tr>

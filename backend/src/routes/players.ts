@@ -4,6 +4,7 @@ import {
   getPlayer,
   createPlayer,
   updatePlayer,
+  updatePlayerRole,
   deletePlayer,
 } from '../controllers/playerController';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
@@ -50,6 +51,7 @@ router.get('/birthdays/today', authenticate, async (_req: AuthRequest, res: Resp
 router.get('/', authenticate, getPlayers);
 router.get('/:id', authenticate, getPlayer);
 router.post('/', authenticate, requireAdmin, createPlayer);
+router.put('/:id/role', authenticate, requireAdmin, updatePlayerRole);
 router.put('/:id', authenticate, requireAdmin, updatePlayer);
 router.delete('/:id', authenticate, requireAdmin, deletePlayer);
 

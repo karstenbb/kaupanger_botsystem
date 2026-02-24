@@ -18,6 +18,10 @@ export const playersApi = {
     const { data } = await client.put(`/players/${id}`, body);
     return data;
   },
+  updateRole: async (id: string, role: 'ADMIN' | 'USER'): Promise<{ id: string; username: string; role: string }> => {
+    const { data } = await client.put(`/players/${id}/role`, { role });
+    return data;
+  },
   delete: async (id: string): Promise<void> => {
     await client.delete(`/players/${id}`);
   },
