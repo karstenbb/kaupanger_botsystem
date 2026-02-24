@@ -10,6 +10,7 @@ export async function seedAdmins() {
   const admins = [
     { username: 'karsten', email: 'karsten@kaupanger.no', name: 'Karsten Bjelde', position: 'Midtbane' },
     { username: 'nalawi', email: 'nalawi@kaupanger.no', name: 'Nalawi Foto Solomon', position: 'Angriper' },
+    { username: 'aleksander', email: 'aleksander@kaupanger.no', name: 'Aleksander Belland Eriksen', position: 'Midtbane' },
   ];
 
   const password = await bcrypt.hash('admin123', 12);
