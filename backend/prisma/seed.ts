@@ -18,10 +18,6 @@ async function main() {
     data: { name: 'Karsten Bjelde', position: 'Midtbane', number: null },
   });
 
-  const aleksanderPlayer = await prisma.player.create({
-    data: { name: 'Aleksander Belland', position: 'Forsvar', number: null },
-  });
-
   const nalawiPlayer = await prisma.player.create({
     data: { name: 'Nalawi Foto Solomon', position: 'Angriper', number: null },
   });
@@ -36,16 +32,6 @@ async function main() {
       password: adminPassword,
       role: 'ADMIN',
       playerId: karstenPlayer.id,
-    },
-  });
-
-  await prisma.user.create({
-    data: {
-      username: 'aleksander',
-      email: 'aleksander@kaupanger.no',
-      password: adminPassword,
-      role: 'ADMIN',
-      playerId: aleksanderPlayer.id,
     },
   });
 
@@ -312,8 +298,7 @@ Ingen fritak grunna manglande nynorskforståing eller skrivefeil i regelverket.`
   console.log('✅ Seed complete!');
   console.log('─────────────────────────────────────');
   console.log('👤 Admin 1: karsten / admin123');
-  console.log('👤 Admin 2: aleksander / admin123');
-  console.log('👤 Admin 3: nalawi / admin123');
+  console.log('👤 Admin 2: nalawi / admin123');
   console.log(`📋 Fine Types: ${fineTypes.length}`);
   console.log('📜 Rules page content seeded');
   console.log('─────────────────────────────────────');

@@ -9,7 +9,6 @@ import bcrypt from 'bcryptjs';
 export async function seedAdmins() {
   const admins = [
     { username: 'karsten', email: 'karsten@kaupanger.no', name: 'Karsten Bjelde', position: 'Midtbane' },
-    { username: 'aleksander', email: 'aleksander@kaupanger.no', name: 'Aleksander Belland', position: 'Forsvar' },
     { username: 'nalawi', email: 'nalawi@kaupanger.no', name: 'Nalawi Foto Solomon', position: 'Angriper' },
   ];
 

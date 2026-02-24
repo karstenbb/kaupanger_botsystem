@@ -40,38 +40,7 @@ async function main() {
     console.log('ℹ️  Brukar oppdatert til ADMIN: karsten');
   }
 
-  // ── 2. Opprett Aleksander Belland ────────────────────────────────
-  let aleksPlayer = await prisma.player.findFirst({ where: { name: 'Aleksander Belland' } });
-  if (!aleksPlayer) {
-    aleksPlayer = await prisma.player.create({
-      data: { name: 'Aleksander Belland', position: 'Forsvar', number: null },
-    });
-    console.log('✅ Oppretta spelar: Aleksander Belland');
-  } else {
-    console.log('ℹ️  Spelar finst allereie: Aleksander Belland');
-  }
-
-  const aleksUser = await prisma.user.findFirst({ where: { playerId: aleksPlayer.id } });
-  if (!aleksUser) {
-    await prisma.user.create({
-      data: {
-        username: 'aleksander',
-        email: 'aleksander@kaupanger.no',
-        password,
-        role: 'ADMIN',
-        playerId: aleksPlayer.id,
-      },
-    });
-    console.log('✅ Oppretta admin-brukar: aleksander');
-  } else {
-    await prisma.user.update({
-      where: { id: aleksUser.id },
-      data: { role: 'ADMIN' },
-    });
-    console.log('ℹ️  Brukar oppdatert til ADMIN: aleksander');
-  }
-
-  // ── 3. Opprett Nalawi Foto Solomon ───────────────────────────────
+  // ── 2. Opprett Nalawi Foto Solomon ───────────────────────────────
   let nalawiPlayer = await prisma.player.findFirst({ where: { name: 'Nalawi Foto Solomon' } });
   if (!nalawiPlayer) {
     nalawiPlayer = await prisma.player.create({
@@ -102,7 +71,7 @@ async function main() {
     console.log('ℹ️  Brukar oppdatert til ADMIN: nalawi');
   }
 
-  // ── 4. Fjern gammal "admin" brukar og "Admin" spelar ─────────────
+  // ── 3. Fjern gammal "admin" brukar og "Admin" spelar ─────────────
   const oldAdmin = await prisma.user.findFirst({ where: { username: 'admin' } });
   if (oldAdmin) {
     // Flytt eventuelle bøter som peikar på Admin-spelaren
@@ -128,8 +97,7 @@ async function main() {
 
   console.log('\n─────────────────────────────────────');
   console.log('👤 Admin 1: karsten / admin123');
-  console.log('👤 Admin 2: aleksander / admin123');
-  console.log('👤 Admin 3: nalawi / admin123');
+  console.log('👤 Admin 2: nalawi / admin123');
   console.log('─────────────────────────────────────');
 }
 
