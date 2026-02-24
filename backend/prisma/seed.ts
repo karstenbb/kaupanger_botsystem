@@ -22,6 +22,38 @@ async function main() {
     data: { name: 'Nalawi Foto Solomon', position: 'Angriper', number: null },
   });
 
+  // ── Legg til Diana Teigen ───────────────────────────────────────────
+  const dianaPlayer = await prisma.player.create({
+    data: { name: 'Diana Teigen', position: null, number: null },
+  });
+
+  // Opprett første bot for Diana (denne måneden)
+  const now = new Date();
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  // Finn eller opprett bøtetype for Diana
+  let dianaFineType = await prisma.fineType.findFirst({ where: { name: 'Månedlig Diana-bot' } });
+  if (!dianaFineType) {
+    dianaFineType = await prisma.fineType.create({
+      data: {
+        name: 'Månedlig Diana-bot',
+        amount: 200,
+        description: 'Automatisk bot for Diana Teigen, 200 kr kvar måned',
+        category: 'Automatisk',
+      },
+    });
+  }
+  await prisma.fine.create({
+    data: {
+      playerId: dianaPlayer.id,
+      fineTypeId: dianaFineType.id,
+      amount: 200,
+      reason: 'Automatisk månedlig bot',
+      status: 'PAID',
+      date: endOfMonth,
+      paidAt: endOfMonth,
+    },
+  });
+
   // ── Create Admin Users ─────────────────────────────────────────────
   const adminPassword = await bcrypt.hash('admin123', 12);
 

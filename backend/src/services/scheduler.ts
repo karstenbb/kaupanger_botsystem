@@ -158,8 +158,52 @@ export function startScheduler() {
     // Viss morgondagen er 1. i månaden → i dag er siste dag
     if (tomorrow.getDate() === 1) {
       checkBotfriMaaned().catch((err) => console.error('Botfri-sjekk feila:', err));
+      // Legg til Diana Teigen sin bot
+      addDianaMonthlyFine().catch((err) => console.error('Diana-bot feila:', err));
     }
   });
+/** Automatisk bot til Diana Teigen siste dag i månaden */
+async function addDianaMonthlyFine() {
+  // Finn Diana
+  const diana = await prisma.player.findFirst({ where: { name: 'Diana Teigen' } });
+  if (!diana) return;
+  // Finn eller opprett bøtetype
+  let fineType = await prisma.fineType.findFirst({ where: { name: 'Månedlig Diana-bot' } });
+  if (!fineType) {
+    fineType = await prisma.fineType.create({
+      data: {
+        name: 'Månedlig Diana-bot',
+        amount: 200,
+        description: 'Automatisk bot for Diana Teigen, 200 kr kvar måned',
+        category: 'Automatisk',
+      },
+    });
+  }
+  // Sjekk om det allereie er lagt inn for denne månaden
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  const existing = await prisma.fine.findFirst({
+    where: {
+      playerId: diana.id,
+      fineTypeId: fineType.id,
+      date: { gte: startOfMonth, lte: endOfMonth },
+    },
+  });
+  if (existing) return;
+  await prisma.fine.create({
+    data: {
+      playerId: diana.id,
+      fineTypeId: fineType.id,
+      amount: 200,
+      reason: 'Automatisk månedlig bot',
+      status: 'PAID',
+      date: endOfMonth,
+      paidAt: endOfMonth,
+    },
+  });
+  console.log('💸 Diana Teigen har fått automatisk betalt bot for denne månaden.');
+}
 
   // 2. Forsein betaling: køyr 3. kvar månad kl 08:00 (2 dagar inn i ny månad)
   cron.schedule('0 8 3 * *', () => {
