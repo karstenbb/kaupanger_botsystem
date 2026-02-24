@@ -25,8 +25,11 @@ export async function seedAdmins() {
       console.log(`✅ Oppretta spelar: ${admin.name}`);
     }
 
-    // Finn eller opprett brukar
-    const user = await prisma.user.findFirst({ where: { playerId: player.id } });
+    // Finn eller opprett brukar (sjekk både playerId og username)
+    let user = await prisma.user.findFirst({ where: { playerId: player.id } });
+    if (!user) {
+      user = await prisma.user.findFirst({ where: { username: admin.username } });
+    }
     if (!user) {
       await prisma.user.create({
         data: {
