@@ -119,6 +119,17 @@ input, button, textarea, select {
   font-size: 20px;
 }
 
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.brand-logo-mobile {
+  width: 24px;
+  height: 24px;
+}
+
 .sidebar-logo h1 {
   font-size: 16px;
   font-weight: 700;
