@@ -2,8 +2,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
 import BirthdayBanner from './BirthdayBanner';
-import kaupangerLogo from '../assets/kaupanger-logo.svg';
 import {
+  IconKaupanger,
   IconHome,
   IconUsers,
   IconDocument,
@@ -37,7 +37,7 @@ export default function Layout() {
       <aside className="sidebar">
         <div className="sidebar-logo">
           <div className="sidebar-logo-icon">
-            <img src={kaupangerLogo} alt="Kaupanger logo" className="brand-logo" />
+            <IconKaupanger className="brand-logo" />
           </div>
           <div>
             <h1>Kaupanger</h1>
@@ -83,7 +83,7 @@ export default function Layout() {
         {/* Mobile header */}
         <header className="mobile-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src={kaupangerLogo} alt="Kaupanger logo" className="brand-logo brand-logo-mobile" />
+            <IconKaupanger className="brand-logo brand-logo-mobile" />
             <div>
               <h1>Kaupanger</h1>
               <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Botsystem</span>

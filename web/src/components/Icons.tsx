@@ -124,6 +124,32 @@ export function IconFootball({ className }: { className?: string }) {
   );
 }
 
+export function IconKaupanger({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 40 40"
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="40"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="kaupangerLogoGradient" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#42A5F5" />
+          <stop offset="1" stopColor="#1565C0" />
+        </linearGradient>
+      </defs>
+      <rect x="1" y="1" width="38" height="38" rx="10" fill="url(#kaupangerLogoGradient)" />
+      <circle cx="20" cy="20" r="9.5" stroke="#F3F4F6" strokeWidth="2.7" fill="none" />
+      <ellipse cx="20" cy="20" rx="4" ry="9.5" stroke="#F3F4F6" strokeWidth="2.7" fill="none" />
+      <path d="M10.5 20H29.5" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
+      <path d="M12.8 14H27.2" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
+      <path d="M12.8 26H27.2" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function IconWallet({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
