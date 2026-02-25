@@ -1,6 +1,14 @@
 import client from './client';
 import type { Player } from '../types';
 
+export interface PlayerWriteBody {
+  name: string;
+  birthDate?: string | null;
+  number?: number | null;
+  position?: string | null;
+  avatarUrl?: string | null;
+}
+
 export const playersApi = {
   getAll: async (): Promise<Player[]> => {
     const { data } = await client.get('/players');
@@ -10,11 +18,11 @@ export const playersApi = {
     const { data } = await client.get(`/players/${id}`);
     return data;
   },
-  create: async (body: { name: string; birthDate?: string; number?: number; position?: string }): Promise<Player> => {
+  create: async (body: PlayerWriteBody): Promise<Player> => {
     const { data } = await client.post('/players', body);
     return data;
   },
-  update: async (id: string, body: Partial<{ name: string; number: number; position: string; birthDate: string | null }>): Promise<Player> => {
+  update: async (id: string, body: Partial<PlayerWriteBody>): Promise<Player> => {
     const { data } = await client.put(`/players/${id}`, body);
     return data;
   },

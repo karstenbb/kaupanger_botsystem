@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fineTypesApi } from '../api/fineTypes';
-import { playersApi } from '../api/players';
+import { playersApi, type PlayerWriteBody } from '../api/players';
 import client from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import Modal from '../components/Modal';
@@ -19,9 +19,9 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
 
   // Spelarar
-  const [players, setPlayers] = useState<(Player & { birthDate?: string | null })[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
-  const [editingPlayer, setEditingPlayer] = useState<(Player & { birthDate?: string | null }) | null>(null);
+  const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const [playerForm, setPlayerForm] = useState({ name: '', position: '', number: '', birthDate: '' });
   const [savingPlayer, setSavingPlayer] = useState(false);
 
@@ -106,7 +106,7 @@ export default function AdminPage() {
     setShowPlayerModal(true);
   };
 
-  const openEditPlayer = (p: Player & { birthDate?: string | null }) => {
+  const openEditPlayer = (p: Player) => {
     setEditingPlayer(p);
     setPlayerForm({
       name: p.name,
@@ -121,16 +121,16 @@ export default function AdminPage() {
     if (!playerForm.name) return;
     setSavingPlayer(true);
     try {
-      const body: Record<string, unknown> = {
+      const body: PlayerWriteBody = {
         name: playerForm.name,
         position: playerForm.position || null,
         number: playerForm.number ? Number(playerForm.number) : null,
         birthDate: playerForm.birthDate || null,
       };
       if (editingPlayer) {
-        await playersApi.update(editingPlayer.id, body as any);
+        await playersApi.update(editingPlayer.id, body);
       } else {
-        await playersApi.create(body as any);
+        await playersApi.create(body);
       }
       setShowPlayerModal(false);
       loadPlayers();
@@ -156,8 +156,9 @@ export default function AdminPage() {
     try {
       await playersApi.updateRole(playerId, newRole);
       loadPlayers();
-    } catch (err: any) {
-      alert(err?.response?.data?.error || 'Klarte ikkje endre rolle');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      alert(error.response?.data?.error || 'Klarte ikkje endre rolle');
     }
   };
 
@@ -269,17 +270,22 @@ export default function AdminPage() {
                   <td style={{ color: 'var(--text-secondary)' }}>{p.position || '—'}</td>
                   <td>{p.number ?? '—'}</td>
                   <td>
-                    {(p as any).user ? (
-                      <button
-                        className={`btn btn-sm ${(p as any).user.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}`}
-                        style={{ fontSize: 11, padding: '2px 10px', minWidth: 60 }}
-                        onClick={() => handleToggleRole(p.id, (p as any).user.role)}
-                      >
-                        {(p as any).user.role === 'ADMIN' ? '⭐ Admin' : 'Brukar'}
-                      </button>
-                    ) : (
-                      <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>Ingen brukar</span>
-                    )}
+                    {(() => {
+                      const playerUser = p.user;
+                      if (!playerUser) {
+                        return <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>Ingen brukar</span>;
+                      }
+
+                      return (
+                        <button
+                          className={`btn btn-sm ${playerUser.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}`}
+                          style={{ fontSize: 11, padding: '2px 10px', minWidth: 60 }}
+                          onClick={() => handleToggleRole(p.id, playerUser.role)}
+                        >
+                          {playerUser.role === 'ADMIN' ? '⭐ Admin' : 'Brukar'}
+                        </button>
+                      );
+                    })()}
                   </td>
                   <td style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
                     {p.birthDate ? new Date(p.birthDate).toLocaleDateString('nb-NO') : '—'}

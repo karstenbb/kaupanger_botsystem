@@ -9,12 +9,22 @@ export interface User {
   };
 }
 
+export interface PlayerUser {
+  id: string;
+  username: string;
+  role: 'ADMIN' | 'USER';
+}
+
 export interface Player {
   id: string;
   name: string;
   number: number | null;
   position: string | null;
+  birthDate?: string | null;
   avatarUrl?: string | null;
+  user?: PlayerUser | null;
+  createdAt?: string;
+  updatedAt?: string;
   totalFines: number;
   totalPaid: number;
   totalUnpaid: number;
