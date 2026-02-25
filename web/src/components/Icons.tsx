@@ -128,24 +128,38 @@ export function IconKaupanger({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      viewBox="0 0 40 40"
+      viewBox="0 0 64 72"
       xmlns="http://www.w3.org/2000/svg"
       width="40"
       height="40"
       aria-hidden="true"
     >
-      <defs>
-        <linearGradient id="kaupangerLogoGradient" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#42A5F5" />
-          <stop offset="1" stopColor="#1565C0" />
-        </linearGradient>
-      </defs>
-      <rect x="1" y="1" width="38" height="38" rx="10" fill="url(#kaupangerLogoGradient)" />
-      <circle cx="20" cy="20" r="9.5" stroke="#F3F4F6" strokeWidth="2.7" fill="none" />
-      <ellipse cx="20" cy="20" rx="4" ry="9.5" stroke="#F3F4F6" strokeWidth="2.7" fill="none" />
-      <path d="M10.5 20H29.5" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
-      <path d="M12.8 14H27.2" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
-      <path d="M12.8 26H27.2" stroke="#F3F4F6" strokeWidth="2.7" strokeLinecap="round" />
+      <path
+        d="M32 3C23 3 15 10 6 14v21c0 18 12 29 26 34 14-5 26-16 26-34V14C49 10 41 3 32 3z"
+        fill="#9ED9FF"
+      />
+      <path
+        d="M9 35h46c-2 13-11 22-23 27C20 57 11 48 9 35z"
+        fill="#F2DC52"
+      />
+      <path d="M6 14C15 10 23 3 32 3c9 0 17 7 26 11" stroke="#7FC7F5" strokeWidth="2" fill="none" />
+
+      <path d="M12 30l4-10 4 10h-3l2 5-6-8h3z" fill="#1C8A6A" />
+      <path d="M52 30l-4-10-4 10h3l-2 5 6-8h-3z" fill="#1C8A6A" />
+
+      <path
+        d="M18 24c4 0 8-3 10-7 1 2 3 4 6 4 2 0 4-1 6-3 0 4 4 7 8 7-2 2-4 3-7 3-2 0-4 0-6-1-3 3-6 4-11 4-3 0-6-1-8-3 1-2 1-3 2-4z"
+        fill="#0E1111"
+      />
+      <path d="M22 31h20" stroke="#0E1111" strokeWidth="3" strokeLinecap="round" />
+
+      <path d="M16 51c3-2 6-2 8 0-2 2-5 3-8 3v-3z" fill="#1C8A6A" />
+      <path d="M30 53V44" stroke="#1C8A6A" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M39 53V44" stroke="#1C8A6A" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M22 53V44c3 0 5 1 6 3-1 3-3 5-6 6z" fill="#1C8A6A" />
+      <path d="M44 53c2-1 4-3 5-6-1-2-3-3-5-3v9z" fill="#1C8A6A" />
+
+      <rect x="1" y="1" width="62" height="70" rx="20" fill="none" stroke="#9ED9FF" strokeWidth="1.8" />
     </svg>
   );
 }
