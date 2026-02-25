@@ -22,22 +22,22 @@ async function main() {
     data: { name: 'Nalawi Foto Solomon', position: 'Angriper', number: null },
   });
 
-  // ── Legg til Diana Teigen ───────────────────────────────────────────
+  // ── Legg til Diana-Maria Teigen Fardal ──────────────────────────────
   const dianaPlayer = await prisma.player.create({
-    data: { name: 'Diana Teigen', position: null, number: null },
+    data: { name: 'Diana-Maria Teigen Fardal', position: null, number: 40 },
   });
 
   // Opprett første bot for Diana (denne måneden)
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
   // Finn eller opprett bøtetype for Diana
-  let dianaFineType = await prisma.fineType.findFirst({ where: { name: 'Månedlig Diana-bot' } });
+  let dianaFineType = await prisma.fineType.findFirst({ where: { name: 'Månedlig Diana-Maria-bot' } });
   if (!dianaFineType) {
     dianaFineType = await prisma.fineType.create({
       data: {
-        name: 'Månedlig Diana-bot',
+        name: 'Månedlig Diana-Maria-bot',
         amount: 200,
-        description: 'Automatisk bot for Diana Teigen, 200 kr kvar måned',
+        description: 'Automatisk bot for Diana-Maria Teigen Fardal, 200 kr kvar måned',
         category: 'Automatisk',
       },
     });
