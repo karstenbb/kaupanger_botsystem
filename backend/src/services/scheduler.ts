@@ -1,6 +1,10 @@
 import cron from 'node-cron';
 import prisma from './prisma';
 
+const DIANA_MONTHLY_FINE_NAME = 'Månedlig Diana-Maria-bot';
+const DIANA_MONTHLY_FINE_AMOUNT = 200;
+const DIANA_MONTHLY_FINE_DESCRIPTION = 'Automatisk bot for Diana-Maria Teigen Fardal, 200 kr kvar måned';
+
 /**
  * Automatiske bøter:
  *
@@ -143,6 +147,89 @@ async function checkForseinBetaling() {
   console.log(`  ✅ Forsein-bot gjeven til ${count} spelar(ar).`);
 }
 
+/** Automatisk bot til Diana-Maria Teigen Fardal siste dag i månaden */
+async function addDianaMonthlyFine() {
+  // Finn Diana-Maria (prioriter #40-identiteten, men støtt eldre namn)
+  const diana = await prisma.player.findFirst({
+    where: {
+      OR: [
+        { name: 'Diana-Maria Teigen Fardal #40' },
+        {
+          AND: [
+            { name: { contains: 'Diana-Maria Teigen Fardal' } },
+            { number: 40 },
+          ],
+        },
+        { name: 'Diana-Maria Teigen Fardal' },
+        { name: 'Diana Teigen' },
+      ],
+    },
+  });
+  if (!diana) return;
+
+  // Finn eller opprett bøtetype
+  let fineType = await prisma.fineType.findFirst({
+    where: {
+      OR: [
+        { name: DIANA_MONTHLY_FINE_NAME },
+        { name: 'Månedlig Diana-bot' },
+      ],
+    },
+  });
+  if (!fineType) {
+    fineType = await prisma.fineType.create({
+      data: {
+        name: DIANA_MONTHLY_FINE_NAME,
+        amount: DIANA_MONTHLY_FINE_AMOUNT,
+        description: DIANA_MONTHLY_FINE_DESCRIPTION,
+        category: 'Automatisk',
+      },
+    });
+  } else if (
+    fineType.name !== DIANA_MONTHLY_FINE_NAME
+    || fineType.amount !== DIANA_MONTHLY_FINE_AMOUNT
+    || fineType.description !== DIANA_MONTHLY_FINE_DESCRIPTION
+  ) {
+    fineType = await prisma.fineType.update({
+      where: { id: fineType.id },
+      data: {
+        name: DIANA_MONTHLY_FINE_NAME,
+        amount: DIANA_MONTHLY_FINE_AMOUNT,
+        description: DIANA_MONTHLY_FINE_DESCRIPTION,
+      },
+    });
+  }
+
+  // Innbetalingsdag = siste dag i månaden
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const paymentDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+  // Ikkje legg inn dobbel bot i same månad
+  const existing = await prisma.fine.findFirst({
+    where: {
+      playerId: diana.id,
+      fineTypeId: fineType.id,
+      date: { gte: startOfMonth, lte: paymentDay },
+    },
+  });
+  if (existing) return;
+
+  await prisma.fine.create({
+    data: {
+      playerId: diana.id,
+      fineTypeId: fineType.id,
+      amount: fineType.amount,
+      reason: 'Automatisk månedlig bot',
+      status: 'PAID',
+      date: paymentDay,
+      paidAt: paymentDay,
+    },
+  });
+
+  console.log('💸 Diana-Maria Teigen Fardal #40 har fått automatisk betalt bot for denne månaden.');
+}
+
 /** Start alle automatiske cron-jobbar */
 export function startScheduler() {
   console.log('🕐 Automatiske bøter aktivert:');
@@ -158,52 +245,10 @@ export function startScheduler() {
     // Viss morgondagen er 1. i månaden → i dag er siste dag
     if (tomorrow.getDate() === 1) {
       checkBotfriMaaned().catch((err) => console.error('Botfri-sjekk feila:', err));
-      // Legg til Diana Teigen sin bot
+      // Legg til Diana-Maria Teigen Fardal sin bot
       addDianaMonthlyFine().catch((err) => console.error('Diana-bot feila:', err));
     }
   });
-/** Automatisk bot til Diana Teigen siste dag i månaden */
-async function addDianaMonthlyFine() {
-  // Finn Diana
-  const diana = await prisma.player.findFirst({ where: { name: 'Diana Teigen' } });
-  if (!diana) return;
-  // Finn eller opprett bøtetype
-  let fineType = await prisma.fineType.findFirst({ where: { name: 'Månedlig Diana-bot' } });
-  if (!fineType) {
-    fineType = await prisma.fineType.create({
-      data: {
-        name: 'Månedlig Diana-bot',
-        amount: 200,
-        description: 'Automatisk bot for Diana Teigen, 200 kr kvar måned',
-        category: 'Automatisk',
-      },
-    });
-  }
-  // Sjekk om det allereie er lagt inn for denne månaden
-  const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-  const existing = await prisma.fine.findFirst({
-    where: {
-      playerId: diana.id,
-      fineTypeId: fineType.id,
-      date: { gte: startOfMonth, lte: endOfMonth },
-    },
-  });
-  if (existing) return;
-  await prisma.fine.create({
-    data: {
-      playerId: diana.id,
-      fineTypeId: fineType.id,
-      amount: 200,
-      reason: 'Automatisk månedlig bot',
-      status: 'PAID',
-      date: endOfMonth,
-      paidAt: endOfMonth,
-    },
-  });
-  console.log('💸 Diana Teigen har fått automatisk betalt bot for denne månaden.');
-}
 
   // 2. Forsein betaling: køyr 3. kvar månad kl 08:00 (2 dagar inn i ny månad)
   cron.schedule('0 8 3 * *', () => {
@@ -232,4 +277,4 @@ async function addDianaMonthlyFine() {
 }
 
 /** Eksporter funksjonane for manuell køyring / testing */
-export { checkBotfriMaaned, checkForseinBetaling };
+export { checkBotfriMaaned, checkForseinBetaling, addDianaMonthlyFine };
