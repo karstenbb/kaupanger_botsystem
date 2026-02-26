@@ -7,6 +7,7 @@ import Avatar from '../components/Avatar';
 import Modal from '../components/Modal';
 import { IconPlus, IconSearch } from '../components/Icons';
 import type { Fine, FineType, Player } from '../types';
+import { formatDate } from '../utils/format';
 
 export default function FinesPage() {
   const { isAdmin } = useAuth();
@@ -70,9 +71,6 @@ export default function FinesPage() {
       console.error(err);
     }
   };
-
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
 
   const filtered = fines
     .filter((f) => filter === 'ALL' || f.status === filter)

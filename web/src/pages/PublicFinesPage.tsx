@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import type { FineType } from '../types';
+import { formatKr, formatDate } from '../utils/format';
 
 declare const process: { env: { REACT_APP_API_URL?: string } };
 const API = process.env.REACT_APP_API_URL || '/api';
@@ -24,17 +26,10 @@ interface Summary {
   topPlayers: { name: string; total: number; count: number }[];
 }
 
-interface PublicFineType {
-  id: string;
-  name: string;
-  amount: number;
-  description: string | null;
-}
-
 export default function PublicFinesPage() {
   const [fines, setFines] = useState<PublicFine[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [fineTypes, setFineTypes] = useState<PublicFineType[]>([]);
+  const [fineTypes, setFineTypes] = useState<FineType[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'ALL' | 'PAID' | 'UNPAID'>('ALL');
   const [search, setSearch] = useState('');
@@ -54,10 +49,6 @@ export default function PublicFinesPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
-
-  const formatKr = (n: number) => `${(n ?? 0).toLocaleString('nb-NO')} kr`;
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
 
   const filtered = fines
     .filter((f) => filter === 'ALL' || f.status === filter)

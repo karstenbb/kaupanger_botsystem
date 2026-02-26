@@ -265,8 +265,3 @@ function AuthenticatedRules({
     </div>
   );
 }
-
-/** Wrapper so we don't call useAuth() at top-level on public page */
-function useAuthSafe() {
-  return useAuth();
-}

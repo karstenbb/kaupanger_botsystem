@@ -5,6 +5,7 @@ import { leaderboardApi } from '../api/leaderboard';
 import { useAuth } from '../context/AuthContext';
 import Avatar from '../components/Avatar';
 import type { DashboardData, LeaderboardEntry } from '../types';
+import { formatKr } from '../utils/format';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -25,8 +26,6 @@ export default function DashboardPage() {
 
   if (loading) return <div className="loading-page"><div className="spinner" /></div>;
   if (!data) return <div className="empty-state"><p>Kunne ikkje laste data</p></div>;
-
-  const formatKr = (n: number) => `${(n ?? 0).toLocaleString('nb-NO')} kr`;
 
   return (
     <>

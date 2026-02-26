@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Avatar from '../components/Avatar';
 import { IconBack } from '../components/Icons';
 import type { Player, Fine } from '../types';
+import { formatDate } from '../utils/format';
 
 export default function PlayerProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -50,9 +51,6 @@ export default function PlayerProfilePage() {
       console.error(err);
     }
   };
-
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
 
   if (loading) return <div className="loading-page"><div className="spinner" /></div>;
   if (!player) return <div className="empty-state"><p>Spelar ikkje funnen</p></div>;

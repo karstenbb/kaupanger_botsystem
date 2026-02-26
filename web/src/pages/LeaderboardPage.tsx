@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { leaderboardApi } from '../api/leaderboard';
 import Avatar from '../components/Avatar';
 import type { LeaderboardEntry } from '../types';
+import { formatKr } from '../utils/format';
 
 export default function LeaderboardPage() {
   const navigate = useNavigate();
@@ -14,8 +15,6 @@ export default function LeaderboardPage() {
   }, []);
 
   if (loading) return <div className="loading-page"><div className="spinner" /></div>;
-
-  const formatKr = (n: number) => `${(n ?? 0).toLocaleString('nb-NO')} kr`;
 
   return (
     <>

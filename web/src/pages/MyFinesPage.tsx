@@ -3,6 +3,7 @@ import { finesApi } from '../api/fines';
 import { useAuth } from '../context/AuthContext';
 import Avatar from '../components/Avatar';
 import type { Fine } from '../types';
+import { formatDate } from '../utils/format';
 
 export default function MyFinesPage() {
   const { user } = useAuth();
@@ -21,9 +22,6 @@ export default function MyFinesPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [user?.playerId]);
-
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
 
   const filtered = fines.filter((f) => filter === 'ALL' || f.status === filter);
 
