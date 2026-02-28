@@ -5,16 +5,22 @@ import Avatar from '../components/Avatar';
 import type { LeaderboardEntry } from '../types';
 import { formatKr } from '../utils/format';
 
+type Period = 'month' | 'year';
+
 export default function LeaderboardPage() {
   const navigate = useNavigate();
   const [data, setData] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<Period>('month');
 
   useEffect(() => {
-    leaderboardApi.get().then(setData).catch(console.error).finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div className="loading-page"><div className="spinner" /></div>;
+    setLoading(true);
+    leaderboardApi
+      .get(period)
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [period]);
 
   return (
     <>
@@ -23,7 +29,24 @@ export default function LeaderboardPage() {
         <p>Kven skuldar mest?</p>
       </div>
 
-      {data.length > 0 ? (
+      <div className="filter-pills" style={{ marginBottom: 16 }}>
+        <button
+          className={`filter-pill${period === 'month' ? ' active' : ''}`}
+          onClick={() => setPeriod('month')}
+        >
+          Denne månaden
+        </button>
+        <button
+          className={`filter-pill${period === 'year' ? ' active' : ''}`}
+          onClick={() => setPeriod('year')}
+        >
+          Totalt i år
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="loading-page"><div className="spinner" /></div>
+      ) : data.length > 0 ? (
         <div className="card">
           <div className="leaderboard-list">
             {data.map((p, i) => {

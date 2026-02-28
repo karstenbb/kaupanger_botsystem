@@ -2,11 +2,18 @@ import { Response } from 'express';
 import prisma from '../services/prisma';
 import { AuthRequest } from '../middleware/auth';
 
-/** GET /api/leaderboard — Player rankings by total fines amount */
+/** GET /api/leaderboard?period=month|year — Player rankings by total fines amount */
 export async function getLeaderboard(req: AuthRequest, res: Response): Promise<void> {
   try {
+    const period = (req.query.period as string) || 'month';
+    const now = new Date();
+    const from =
+      period === 'year'
+        ? new Date(now.getFullYear(), 0, 1)
+        : new Date(now.getFullYear(), now.getMonth(), 1);
+
     const players = await prisma.player.findMany({
-      include: { fines: true },
+      include: { fines: { where: { date: { gte: from } } } },
     });
 
     const leaderboard = players
