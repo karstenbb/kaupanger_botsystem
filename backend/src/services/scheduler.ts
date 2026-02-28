@@ -234,7 +234,6 @@ async function addDianaMonthlyFine() {
 export function startScheduler() {
   console.log('🕐 Automatiske bøter aktivert:');
   console.log('   • Botfri månad — Siste dagen kvar månad kl 08:00');
-  console.log('   • Forsein betaling — 3. kvar månad kl 08:00');
   console.log('   • DB keep-alive — Kvart 10. minutt');
 
   // 1. Botfri månad: køyr siste dag kvar månad kl 08:00
@@ -250,12 +249,7 @@ export function startScheduler() {
     }
   });
 
-  // 2. Forsein betaling: køyr 3. kvar månad kl 08:00 (2 dagar inn i ny månad)
-  cron.schedule('0 8 3 * *', () => {
-    checkForseinBetaling().catch((err) => console.error('Forsein-sjekk feila:', err));
-  });
-
-  // 3. DB keep-alive — ping databasen kvart 10. minutt for å halde tilkoplinga varm
+  // 2. DB keep-alive — ping databasen kvart 10. minutt for å halde tilkoplinga varm
   cron.schedule('*/10 * * * *', async () => {
     try {
       await prisma.$queryRaw`SELECT 1`;
